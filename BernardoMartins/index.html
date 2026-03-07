@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Pac-Man Fantasmas Fluídos</title>
+<style>
+body{
+  margin:0;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:white;
+  font-family:Arial;
+}
+canvas{
+  background:black;
+  border:4px solid #333;
+}
+#ui{
+  position:absolute;
+  top:10px;
+  left:10px;
+  font-size:18px;
+}
+</style>
+</head>
+<body>
+
+<div id="ui">
+Level: <span id="level">1</span> |
+Pontuação: <span id="score">0</span> |
+Vidas: <span id="lives">3</span>
+</div>
+
+<canvas id="game" width="640" height="480"></canvas>
+
+<script>
+const canvas=document.getElementById("game")
+const ctx=canvas.getContext("2d")
+const tile=32
+
+let score=0, lives=3, level=1
+const maxLevel=50
+let power=false, powerTimer=0
+let ghostSpeed=0.03 // pixels por frame
+
+let pacMouth=0, mouthDir=0.2
+
+const mapaOriginal=[
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,1],
+[1,2,1,1,2,1,1,1,2,1,1,2,1,2,1,1,1,2,2,1],
+[1,3,2,2,2,2,2,1,2,2,2,2,2,2,2,2,1,2,3,1],
+[1,2,1,1,2,1,2,1,1,1,2,1,1,1,2,2,1,2,2,1],
+[1,2,2,2,2,1,2,2,2,1,2,2,2,1,2,2,2,2,2,1],
+[1,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1,1,1,2,1],
+[1,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+]
+
+let mapa
+function copiarMapa(){ mapa = mapaOriginal.map(r=>r.slice()) }
+copiarMapa()
+
+let pacman={x:1,y:1}
+
+let ghosts=[
+  {x:10,y:4,color:"red"},
+  {x:11,y:4,color:"pink"},
+  {x:12,y:4,color:"cyan"},
+  {x:13,y:4,color:"orange"}
+]
+
+function contarBolas(){
+  let total=0
+  for(let y=0;y<mapa.length;y++)
+    for(let x=0;x<mapa[y].length;x++)
+      if(mapa[y][x]==2 || mapa[y][x]==3) total++
+  return total
+}
+
+function proximoLevel(){
+  if(level>=maxLevel){ alert("Você venceu os 50 níveis!"); reiniciarJogo(); return }
+  level++
+  document.getElementById("level").innerText=level
+  copiarMapa()
+  pacman.x=1; pacman.y=1
+  ghostSpeed+=0.003
+  alert("Level "+level)
+}
+
+function reiniciarJogo(){
+  level=1; score=0; lives=3; ghostSpeed=0.03
+  copiarMapa()
+  pacman.x=1; pacman.y=1
+  document.getElementById("level").innerText=level
+  document.getElementById("score").innerText=score
+  document.getElementById("lives").innerText=lives
+}
+
+function drawMap(){
+  for(let y=0;y<mapa.length;y++){
+    for(let x=0;x<mapa[y].length;x++){
+      if(mapa[y][x]==1){ ctx.fillStyle="#0033ff"; ctx.fillRect(x*tile,y*tile,tile,tile) }
+      if(mapa[y][x]==2){ ctx.fillStyle="white"; ctx.beginPath(); ctx.arc(x*tile+16,y*tile+16,4,0,Math.PI*2); ctx.fill() }
+      if(mapa[y][x]==3){ ctx.fillStyle="orange"; ctx.beginPath(); ctx.arc(x*tile+16,y*tile+16,8,0,Math.PI*2); ctx.fill() }
+    }
+  }
+}
+
+function drawPacman(){
+  pacMouth+=mouthDir
+  if(pacMouth>0.25 || pacMouth<0) mouthDir*=-1
+  ctx.fillStyle="yellow"
+  ctx.beginPath()
+  ctx.arc(pacman.x*tile+16,pacman.y*tile+16,14,pacMouth*Math.PI,(2-Math.abs(pacMouth))*Math.PI)
+  ctx.lineTo(pacman.x*tile+16,pacman.y*tile+16)
+  ctx.fill()
+}
+
+function drawGhost(g){
+  let x=g.x*tile, y=g.y*tile
+  ctx.fillStyle=power?"blue":g.color
+  ctx.beginPath()
+  ctx.arc(x+16,y+16,14,Math.PI,0)
+  ctx.lineTo(x+30,y+30)
+  ctx.lineTo(x+24,y+24)
+  ctx.lineTo(x+16,y+30)
+  ctx.lineTo(x+8,y+24)
+  ctx.lineTo(x+2,y+30)
+  ctx.fill()
+  ctx.fillStyle="white"
+  ctx.beginPath()
+  ctx.arc(x+10,y+14,4,0,Math.PI*2)
+  ctx.arc(x+22,y+14,4,0,Math.PI*2)
+  ctx.fill()
+  ctx.fillStyle="black"
+  ctx.beginPath()
+  ctx.arc(x+10,y+14,2,0,Math.PI*2)
+  ctx.arc(x+22,y+14,2,0,Math.PI*2)
+  ctx.fill()
+}
+
+function drawGhosts(){ ghosts.forEach(drawGhost) }
+
+function movePacman(dx,dy){
+  let nx=Math.round(pacman.x+dx), ny=Math.round(pacman.y+dy)
+  if(mapa[ny][nx]!=1){
+    pacman.x+=dx; pacman.y+=dy
+    if(mapa[ny][nx]==2){ mapa[ny][nx]=0; score+=10 }
+    if(mapa[ny][nx]==3){ mapa[ny][nx]=0; score+=50; power=true; powerTimer=5000 }
+    document.getElementById("score").innerText=score
+    if(contarBolas()==0) proximoLevel()
+  }
+}
+
+function moveGhosts(){
+  ghosts.forEach(g=>{
+    let dx=pacman.x-g.x
+    let dy=pacman.y-g.y
+    let dist=Math.sqrt(dx*dx+dy*dy)
+    let step=ghostSpeed
+    if(dist>0){ g.x+=dx/dist*step; g.y+=dy/dist*step }
+    // colisão com pacman
+    if(Math.abs(g.x-pacman.x)<0.5 && Math.abs(g.y-pacman.y)<0.5){
+      if(power){ score+=200; g.x=10; g.y=4 }
+      else{
+        lives--; document.getElementById("lives").innerText=lives
+        pacman.x=1; pacman.y=1
+        if(lives<=0) reiniciarJogo()
+      }
+    }
+  })
+}
+
+document.addEventListener("keydown",e=>{
+  if(e.key=="w") movePacman(0,-0.2)
+  if(e.key=="s") movePacman(0,0.2)
+  if(e.key=="a") movePacman(-0.2,0)
+  if(e.key=="d") movePacman(0.2,0)
+})
+
+function loop(){
+  ctx.clearRect(0,0,canvas.width,canvas.height)
+  drawMap()
+  drawPacman()
+  drawGhosts()
+  moveGhosts()
+  requestAnimationFrame(loop)
+}
+
+setInterval(()=>{ if(power){ powerTimer-=100; if(powerTimer<=0) power=false } },100)
+
+loop()
+</script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Empilha Minérios - Minecraft Style (Corrigido)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { margin:0; height:100vh; background:#0a0015; color:#eee; font-family:Arial; overflow:hidden; display:flex; justify-content:center; align-items:center; }
+  #game { border:5px solid #333; image-rendering:pixelated; box-shadow:0 0 30px #000; }
+  #ui { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.6); padding:8px 16px; border-radius:8px; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<canvas id="game" width="400" height="600"></canvas>
+<div id="ui">Clica ou ESPAÇO para largar</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const W = 400, H = 600;
+
+let stack = [];
+let moving = null;
+let score = 0;
+let gameOver = false;
+let level = 0;
+let blockHeight = 32;
+let currentWidth = 220;
+let speed = 2.8;
+
+const MAX_VISIBLE_BLOCKS = 30; // evita travar com muitos blocos
+
+const oreTypes = [
+  {name:"Coal", base:"#383838", vein:"#1a1a1a"},
+  {name:"Iron", base:"#5d4a3a", vein:"#c4a679"},
+  {name:"Copper", base:"#5a3a1a", vein:"#d97a3e"},
+  {name:"Gold", base:"#5f4a2e", vein:"#f0d8a8"},
+  {name:"Redstone", base:"#4a1a1a", vein:"#d43232"},
+  {name:"Diamond", base:"#2e4f4f", vein:"#3fe0e0"},
+  {name:"Emerald", base:"#2e4f2e", vein:"#40df40"}
+];
+
+function getOre() { return oreTypes[level % oreTypes.length]; }
+
+function drawOreBlock(x, y, w, ore) {
+  ctx.fillStyle = ore.base;
+  ctx.fillRect(x, y, w, blockHeight);
+
+  ctx.fillStyle = ore.vein;
+  const s = 2;
+  ctx.fillRect(x+s*3, y+s*3, s*5, s*5); // veios simples para performance
+
+  ctx.strokeStyle = "#111";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x+0.5, y+0.5, w-1, blockHeight-1);
+}
+
+function init() {
+  stack = [];
+  score = 0;
+  level = 0;
+  currentWidth = 220;
+  speed = 2.8;
+  gameOver = false;
+
+  stack.push({
+    x: (W - 220)/2,
+    y: H - 80,
+    width: 220,
+    ore: {name:"Deepslate", base:"#3a3a3a", vein:"#222"}
+  });
+
+  createNewMoving();
+}
+
+function createNewMoving() {
+  if (gameOver) return;
+  const last = stack[stack.length-1];
+  const ore = getOre();
+  const fromLeft = Math.random() > 0.5;
+
+  moving = {
+    x: fromLeft ? -currentWidth : W,
+    y: last.y - blockHeight,
+    width: currentWidth,
+    dir: fromLeft ? 1 : -1,
+    speed: speed,
+    ore: ore
+  };
+}
+
+function drop() {
+  if (!moving || gameOver) return;
+
+  const last = stack[stack.length-1];
+  let left = Math.max(moving.x, last.x);
+  let right = Math.min(moving.x + moving.width, last.x + last.width);
+
+  if (left >= right) {
+    gameOver = true;
+    return;
+  }
+
+  const newW = right - left;
+  const newX = left;
+
+  const centerDiff = Math.abs((moving.x + moving.width/2) - (last.x + last.width/2));
+  score += centerDiff < 8 ? 100 : 20;
+
+  stack.push({ x: newX, y: moving.y, width: newW, ore: moving.ore });
+
+  currentWidth = newW * 0.94;
+  speed = Math.min(10, speed + 0.35);
+  level++;
+
+  createNewMoving();
+}
+
+function update() {
+  if (gameOver || !moving) return;
+
+  moving.x += moving.dir * moving.speed;
+
+  if (moving.dir > 0 && moving.x + moving.width > W) {
+    moving.dir = -1;
+    moving.x = W - moving.width;
+  }
+  if (moving.dir < 0 && moving.x < 0) {
+    moving.dir = 1;
+    moving.x = 0;
+  }
+}
+
+function draw() {
+  ctx.fillStyle = "#0a0015";
+  ctx.fillRect(0,0,W,H);
+
+  // Desenha apenas os blocos visíveis (os mais recentes)
+  const startIdx = Math.max(0, stack.length - MAX_VISIBLE_BLOCKS);
+  for (let i = startIdx; i < stack.length; i++) {
+    const b = stack[i];
+    drawOreBlock(b.x, b.y, b.width, b.ore);
+  }
+
+  if (moving) drawOreBlock(moving.x, moving.y, moving.width, moving.ore);
+
+  ctx.fillStyle = "#fff";
+  ctx.font = "bold 24px Arial";
+  ctx.textAlign = "left";
+  ctx.fillText(`Pontos: ${score}`, 16, 40);
+
+  ctx.font = "16px Arial";
+  ctx.fillText(`Nível ${level+1} - ${getOre().name}`, 16, 70);
+
+  if (gameOver) {
+    ctx.fillStyle = "rgba(0,0,0,0.85)";
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = "#ff4444";
+    ctx.font = "bold 48px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("GAME OVER", W/2, H/2 - 20);
+    ctx.fillStyle = "#fff";
+    ctx.font = "28px Arial";
+    ctx.fillText(`${score} pontos`, W/2, H/2 + 30);
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "#88ffff";
+    ctx.fillText("Clica ou ESPAÇO p/ recomeçar", W/2, H/2 + 80);
+  }
+}
+
+function loop() {
+  if (!gameOver) update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+function handleAction() {
+  if (gameOver) {
+    init();
+  } else {
+    drop();
+  }
+}
+
+canvas.addEventListener('click', handleAction);
+canvas.addEventListener('touchstart', e => { e.preventDefault(); handleAction(); });
+
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    handleAction();
+  }
+});
+
+init();
+loop();
+</script>
+</body>
+</html>

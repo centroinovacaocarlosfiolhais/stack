@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elementos da Natureza</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&display=swap');
+
+  :root {
+    --gold: #f5c842;
+    --gold-light: #ffe97a;
+    --gold-dark: #a8860a;
+    --rara: #4fc3f7;
+    --epica: #ce93d8;
+    --lendaria: #ffb74d;
+    --mitica: #ef9a9a;
+    --divina: #fff9c4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cinzel', serif;
+    background: #0a0a0f;
+    color: #fff;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    user-select: none;
+  }
+
+  /* ========= SCREENS ========= */
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .screen.active { display: flex; }
+
+  /* ========= MENU ========= */
+  #menu-screen {
+    background: #000;
+  }
+
+  .menu-bg {
+    position: absolute;
+    inset: 0;
+    background: url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1600&q=80') center/cover no-repeat;
+    filter: blur(4px) brightness(0.35);
+    transform: scale(1.05);
+  }
+
+  .menu-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(10,20,5,0.3) 0%, rgba(0,0,0,0.75) 100%);
+  }
+
+  .menu-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    animation: fadeInDown 1.2s ease;
+  }
+
+  .game-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: 4px;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #a8ff78, #78ffd6, var(--gold), #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 30px rgba(120,255,180,0.4));
+    margin-bottom: 8px;
+  }
+
+  .game-subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-bottom: 60px;
+  }
+
+  .menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .btn {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .btn:hover::after { transform: translateX(0); }
+
+  .btn-primary {
+    width: 260px;
+    padding: 18px 40px;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, #1a3a1a, #2d5a2d);
+    color: #a8ff78;
+    border: 2px solid #4caf50;
+    box-shadow: 0 0 20px rgba(76,175,80,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #2d5a2d, #4a8a4a);
+    box-shadow: 0 0 40px rgba(76,175,80,0.6), 0 0 80px rgba(76,175,80,0.2);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .btn-secondary {
+    width: 260px;
+    padding: 18px 40px;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, #1a1a3a, #2d2d6a);
+    color: #7878ff;
+    border: 2px solid #4040cc;
+    box-shadow: 0 0 20px rgba(64,64,204,0.3);
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  }
+  .btn-secondary:hover {
+    background: linear-gradient(135deg, #2d2d6a, #4a4aaa);
+    box-shadow: 0 0 40px rgba(120,120,255,0.6);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .btn-danger {
+    width: 260px;
+    padding: 14px 40px;
+    font-size: 0.9rem;
+    background: rgba(30,5,5,0.8);
+    color: #ff6b6b;
+    border: 1px solid rgba(255,107,107,0.4);
+    letter-spacing: 4px;
+  }
+  .btn-danger:hover {
+    background: rgba(80,10,10,0.9);
+    border-color: #ff6b6b;
+    box-shadow: 0 0 20px rgba(255,107,107,0.4);
+    transform: translateY(-1px);
+  }
+
+  /* ========= GACHA SCREEN ========= */
+  #gacha-screen {
+    background: #05080f;
+  }
+
+  .sky-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(100,150,255,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(150,100,255,0.1) 0%, transparent 50%),
+      linear-gradient(180deg, #05080f 0%, #0d1525 40%, #0a1020 100%);
+    overflow: hidden;
+  }
+
+  .stars-layer {
+    position: absolute;
+    inset: 0;
+  }
+
+  .star-particle {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--d) ease-in-out infinite;
+    opacity: 0;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: var(--o); transform: scale(1); }
+  }
+
+  .gacha-layout {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+    padding: 40px;
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  .gacha-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    flex-shrink: 0;
+  }
+
+  .gacha-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.4rem;
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-align: center;
+    filter: drop-shadow(0 0 10px rgba(245,200,66,0.5));
+  }
+
+  .orb-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+  }
+
+  .orb {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3), rgba(100,150,255,0.1) 40%, rgba(20,40,100,0.8));
+    border: 2px solid rgba(100,150,255,0.4);
+    box-shadow: 0 0 40px rgba(100,150,255,0.3), inset 0 0 30px rgba(100,150,255,0.1);
+    animation: orbPulse 3s ease-in-out infinite;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+  }
+
+  .orb:hover {
+    box-shadow: 0 0 60px rgba(100,150,255,0.6), inset 0 0 40px rgba(100,150,255,0.2);
+    transform: scale(1.05);
+  }
+
+  @keyframes orbPulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(100,150,255,0.3), inset 0 0 30px rgba(100,150,255,0.1); }
+    50% { box-shadow: 0 0 70px rgba(100,150,255,0.5), inset 0 0 50px rgba(100,150,255,0.2); }
+  }
+
+  .btn-roll {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-size: 1rem;
+    padding: 16px 50px;
+    background: linear-gradient(135deg, #1a1040, #2a1a70);
+    color: var(--gold);
+    border: 2px solid var(--gold-dark);
+    cursor: pointer;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    box-shadow: 0 0 20px rgba(168,134,10,0.3);
+    transition: all 0.3s ease;
+  }
+  .btn-roll:hover {
+    background: linear-gradient(135deg, #2a1a70, #4a2aaa);
+    box-shadow: 0 0 40px rgba(245,200,66,0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-back {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.4);
+    background: none;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 8px 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-back:hover { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.4); }
+
+  /* Result display */
+  .result-display {
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.5s ease;
+  }
+
+  .result-element {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 2rem;
+    font-weight: 900;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+  }
+  .result-element.show { opacity: 1; transform: scale(1); }
+
+  .result-rarity {
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.3s;
+    text-align: center;
+  }
+  .result-rarity.show { opacity: 1; }
+
+  /* Rarity colors */
+  .color-rara { color: var(--rara); filter: drop-shadow(0 0 10px rgba(79,195,247,0.7)); }
+  .color-epica { color: var(--epica); filter: drop-shadow(0 0 10px rgba(206,147,216,0.7)); }
+  .color-lendaria { color: var(--lendaria); filter: drop-shadow(0 0 15px rgba(255,183,77,0.8)); }
+  .color-mitica { color: var(--mitica); filter: drop-shadow(0 0 20px rgba(255,100,100,0.8)); }
+  .color-divina { color: var(--divina); filter: drop-shadow(0 0 30px rgba(255,249,196,1)) drop-shadow(0 0 60px rgba(255,230,100,0.8)); }
+
+  /* ========= RARITIES PANEL ========= */
+  .rarities-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .rarities-panel::-webkit-scrollbar { width: 4px; }
+  .rarities-panel::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+  .rarities-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+
+  .rarity-group {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .rarity-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    font-size: 0.7rem;
+    letter-spacing: 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .rarity-chance {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    opacity: 0.7;
+  }
+
+  .rarity-elements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 14px 14px;
+    background: rgba(0,0,0,0.3);
+  }
+
+  .element-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .element-tag:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+
+  /* Rarity specific */
+  .rarity-rara .rarity-header { background: rgba(79,195,247,0.1); color: var(--rara); border-bottom: 1px solid rgba(79,195,247,0.2); }
+  .rarity-epica .rarity-header { background: rgba(206,147,216,0.1); color: var(--epica); border-bottom: 1px solid rgba(206,147,216,0.2); }
+  .rarity-lendaria .rarity-header { background: rgba(255,183,77,0.1); color: var(--lendaria); border-bottom: 1px solid rgba(255,183,77,0.2); }
+  .rarity-mitica .rarity-header { background: rgba(255,100,100,0.1); color: var(--mitica); border-bottom: 1px solid rgba(255,100,100,0.2); }
+  .rarity-divina .rarity-header { background: rgba(255,249,196,0.1); color: var(--divina); border-bottom: 1px solid rgba(255,249,196,0.3); }
+
+  /* ========= BATTLE SCREEN ========= */
+  #battle-screen {
+    background: #0a0408;
+  }
+
+  .battle-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(180,20,20,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 0%, rgba(20,20,80,0.3) 0%, transparent 50%),
+      linear-gradient(180deg, #0a0410 0%, #150a10 50%, #0a0408 100%);
+  }
+
+  .battle-arena {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 900px;
+    padding: 20px 30px;
+  }
+
+  .battle-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .battle-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+
+  .fighters {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 24px;
+  }
+
+  .fighter-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .fighter-label {
+    font-size: 0.65rem;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 12px;
+  }
+
+  .fighter-icon {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    display: block;
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+  }
+
+  .fighter-name {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .fighter-rarity {
+    font-size: 0.6rem;
+    letter-spacing: 4px;
+    opacity: 0.6;
+    margin-bottom: 14px;
+  }
+
+  .hp-bar-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+
+  .hp-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  .hp-text {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 2px;
+  }
+
+  .vs-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.15);
+    align-self: center;
+    padding-top: 40px;
+  }
+
+  /* Battle log */
+  .battle-log {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    height: 130px;
+    overflow-y: auto;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .battle-log::-webkit-scrollbar { width: 3px; }
+  .battle-log::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+
+  .log-entry {
+    opacity: 0;
+    animation: logAppear 0.4s forwards;
+    padding: 2px 0;
+  }
+  @keyframes logAppear {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .log-player { color: #a8ff78; }
+  .log-bot { color: #ff7878; }
+  .log-system { color: rgba(255,255,255,0.4); font-style: italic; }
+  .log-critical { color: var(--gold); font-weight: bold; }
+
+  /* Battle actions */
+  .battle-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-attack {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #1a0a0a, #3a1010);
+    color: #ff9090;
+    border: 1px solid rgba(255,100,100,0.4);
+    cursor: pointer;
+    transition: all 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-attack:hover:not(:disabled) {
+    background: linear-gradient(135deg, #3a1010, #6a2020);
+    box-shadow: 0 0 20px rgba(255,100,100,0.4);
+    transform: translateY(-2px);
+  }
+  .btn-attack:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .btn-special {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #0a0a2a, #101060);
+    color: #9090ff;
+    border: 1px solid rgba(100,100,255,0.4);
+    cursor: pointer;
+    transition: all 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-special:hover:not(:disabled) {
+    background: linear-gradient(135deg, #101060, #2020a0);
+    box-shadow: 0 0 20px rgba(100,100,255,0.4);
+    transform: translateY(-2px);
+  }
+  .btn-special:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .btn-flee {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    padding: 10px 20px;
+    background: none;
+    color: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-flee:hover { color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.3); }
+
+  /* Result overlay */
+  .battle-result-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 10;
+    gap: 20px;
+  }
+  .battle-result-overlay.show { display: flex; animation: fadeIn 0.5s ease; }
+
+  .result-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 3rem;
+    font-weight: 900;
+  }
+  .result-win { color: #a8ff78; filter: drop-shadow(0 0 30px rgba(168,255,120,0.8)); }
+  .result-lose { color: #ff6b6b; filter: drop-shadow(0 0 30px rgba(255,107,107,0.8)); }
+
+  .result-desc {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.6);
+    font-style: italic;
+    letter-spacing: 2px;
+  }
+
+  /* Animations */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+  }
+  .shake { animation: shake 0.4s ease; }
+
+  @keyframes rollingAnim {
+    0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+    25% { transform: scale(1.2) rotate(5deg); filter: brightness(2); }
+    50% { transform: scale(0.9) rotate(-5deg); filter: brightness(1.5); }
+    75% { transform: scale(1.15) rotate(3deg); filter: brightness(2.5); }
+    100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+  }
+  .rolling { animation: rollingAnim 0.8s ease; }
+
+  .btn-battle-element {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #0f2010, #1a3a1a);
+    border: 2px solid rgba(168,255,120,0.5);
+    cursor: pointer;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    box-shadow: 0 0 20px rgba(168,255,120,0.2);
+    transition: all 0.3s ease;
+    animation: fadeInDown 0.4s ease;
+    width: 100%;
+  }
+  .btn-battle-element:hover {
+    background: linear-gradient(135deg, #1a3a1a, #2d5a2d);
+    box-shadow: 0 0 35px rgba(168,255,120,0.5);
+    transform: translateY(-2px);
+  }
+  .btn-battle-element.color-rara { color: var(--rara); border-color: rgba(79,195,247,0.6); box-shadow: 0 0 20px rgba(79,195,247,0.2); }
+  .btn-battle-element.color-epica { color: var(--epica); border-color: rgba(206,147,216,0.6); box-shadow: 0 0 20px rgba(206,147,216,0.2); }
+  .btn-battle-element.color-lendaria { color: var(--lendaria); border-color: rgba(255,183,77,0.6); box-shadow: 0 0 20px rgba(255,183,77,0.2); }
+  .btn-battle-element.color-mitica { color: var(--mitica); border-color: rgba(239,154,154,0.6); box-shadow: 0 0 20px rgba(239,154,154,0.2); }
+  .btn-battle-element.color-divina { color: var(--divina); border-color: rgba(255,249,196,0.8); box-shadow: 0 0 30px rgba(255,249,196,0.4); }
+
+  /* Saved element badge on menu */
+  .saved-badge {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 2px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .saved-badge span {
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* ========= INVENTORY ========= */
+  .inventory-bar {
+    margin-top: 28px;
+    text-align: center;
+  }
+  .inv-label {
+    font-size: 0.58rem;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .inv-wins-info {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.35);
+  }
+  .inv-slots {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .inv-slot {
+    width: 62px;
+    height: 62px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .inv-slot.locked {
+    border: 1px dashed rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.2);
+    cursor: default;
+    opacity: 0.45;
+  }
+  .inv-slot.locked .slot-icon { display: none; }
+  .inv-slot.locked .slot-name { display: none; }
+  .inv-slot.locked::after { content: '🔒'; font-size: 1rem; }
+  .inv-slot.empty:hover {
+    border-color: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.06);
+  }
+  .inv-slot.filled { border-width: 2px; }
+  .inv-slot.filled:hover { transform: translateY(-3px) scale(1.05); }
+  .inv-slot.selected {
+    box-shadow: 0 0 0 2px #fff, 0 0 16px rgba(255,255,255,0.4);
+    transform: translateY(-4px) scale(1.07);
+  }
+  .slot-icon { font-size: 1.5rem; line-height: 1; }
+  .slot-name {
+    font-size: 0.38rem;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0 3px;
+    line-height: 1.2;
+  }
+  .slot-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 0.38rem;
+    letter-spacing: 0.5px;
+    background: rgba(0,0,0,0.7);
+    padding: 1px 3px;
+    border-radius: 2px;
+  }
+  .inv-slot.color-rara { border-color: rgba(79,195,247,0.5); background: rgba(79,195,247,0.05); }
+  .inv-slot.color-epica { border-color: rgba(206,147,216,0.5); background: rgba(206,147,216,0.05); }
+  .inv-slot.color-lendaria { border-color: rgba(255,183,77,0.5); background: rgba(255,183,77,0.05); }
+  .inv-slot.color-mitica { border-color: rgba(239,154,154,0.5); background: rgba(239,154,154,0.05); }
+  .inv-slot.color-divina { border-color: rgba(255,249,196,0.6); background: rgba(255,249,196,0.06); box-shadow: 0 0 10px rgba(255,249,196,0.12); }
+
+  /* TROCAR overlay — gacha slots */
+  .gacha-inv-slot.filled:not(.gacha-slot-maxed)::before {
+    content: 'TROCAR';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.78);
+    font-family: 'Cinzel', serif;
+    font-size: 0.38rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .gacha-inv-slot.filled:not(.gacha-slot-maxed):hover::before { opacity: 1; }
+
+  /* USAR overlay — menu/inventory slots */
+  .inv-slot.filled:not(.slot-maxed)::before {
+    content: 'TROCAR';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.78);
+    font-family: 'Cinzel', serif;
+    font-size: 0.42rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .inv-slot.filled:not(.slot-maxed):hover::before { opacity: 1; }
+
+  .slot-reroll-count {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.32rem;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.4);
+    white-space: nowrap;
+    background: rgba(0,0,0,0.5);
+    padding: 1px 3px;
+    border-radius: 2px;
+  }
+  .slot-reroll-count.maxed { color: #ff6b6b; }
+  .inv-slot.slot-maxed { opacity: 0.75; }
+  .inv-slot.slot-maxed::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    border: 2px solid rgba(255,100,100,0.4);
+    pointer-events: none;
+  }
+
+  .gs-reroll {
+    font-size: 0.28rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.5px;
+    margin-top: 1px;
+  }
+  .gs-reroll.gs-maxed { color: #ff6b6b; }
+  .gacha-inv-slot.gacha-slot-maxed { opacity: 0.6; cursor: not-allowed !important; }
+  .gacha-inv-slot.gacha-slot-maxed::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255,100,100,0.4);
+    border-radius: 4px;
+    pointer-events: none;
+  }
+
+  /* Gacha mini inventory */
+  .gacha-inv-bar { width: 100%; margin-top: 6px; }
+  .gacha-inv-label {
+    font-size: 0.52rem;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.22);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .gacha-inv-slots { display: flex; gap: 6px; justify-content: center; }
+  .gacha-inv-slot {
+    width: 44px; height: 44px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+    position: relative;
+  }
+  .gacha-inv-slot.locked { opacity: 0.25; cursor: default; border-style: dashed; }
+  .gacha-inv-slot.locked::after { content: '🔒'; font-size: 0.65rem; }
+  .gacha-inv-slot .gs-icon { font-size: 1rem; }
+  .gacha-inv-slot .gs-name { font-size: 0.28rem; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; text-transform: uppercase; }
+  .gacha-inv-slot.filled:hover { transform: scale(1.08); }
+  .gacha-inv-slot.active-slot { box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
+  .gacha-inv-slot.color-rara { border-color: rgba(79,195,247,0.4); }
+  .gacha-inv-slot.color-epica { border-color: rgba(206,147,216,0.4); }
+  .gacha-inv-slot.color-lendaria { border-color: rgba(255,183,77,0.4); }
+  .gacha-inv-slot.color-mitica { border-color: rgba(239,154,154,0.4); }
+  .gacha-inv-slot.color-divina { border-color: rgba(255,249,196,0.5); }
+
+  /* Unlock toast */
+  .unlock-toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: linear-gradient(135deg, #1a1040, #2a1a70);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    padding: 12px 28px;
+    z-index: 300;
+    box-shadow: 0 0 30px rgba(245,200,66,0.4);
+    transition: transform 0.45s cubic-bezier(0.175,0.885,0.32,1.275);
+    white-space: nowrap;
+    text-align: center;
+  }
+  .unlock-toast.show { transform: translateX(-50%) translateY(0); }
+
+  .result-element.clickable-result {
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+  .result-element.clickable-result:hover {
+    transform: scale(1.1);
+    filter: brightness(1.3) drop-shadow(0 0 20px currentColor);
+  }
+  .result-element.clickable-result::after {
+    content: '↺ rolar';
+    display: block;
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 4px;
+  }
+
+  /* Exit confirm */
+  .exit-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 100;
+    gap: 24px;
+  }
+  .exit-overlay.show { display: flex; }
+  .exit-msg {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.5rem;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 3px;
+    text-align: center;
+  }
+  .exit-sub {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9rem;
+  }
+  .exit-buttons { display: flex; gap: 16px; }
+
+  /* Special cooldown */
+  .cooldown-badge {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* Ability name display */
+  .ability-flash {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-align: center;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    white-space: nowrap;
+  }
+  .ability-flash.show {
+    animation: abilityShow 1.2s ease forwards;
+  }
+  @keyframes abilityShow {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    30% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+  }
+</style>
+</head>
+<body>
+
+<!-- UNLOCK TOAST -->
+<div class="unlock-toast" id="unlockToast"></div>
+
+<!-- EXIT CONFIRM -->
+<div class="exit-overlay" id="exitOverlay">
+  <div class="exit-msg">Sair do Jogo?</div>
+  <div class="exit-sub">Sua aventura será perdida...</div>
+  <div class="exit-buttons">
+    <button class="btn btn-danger" onclick="confirmExit()">SAIR</button>
+    <button class="btn btn-secondary" onclick="closeExit()">CANCELAR</button>
+  </div>
+</div>
+
+<!-- MENU SCREEN -->
+<div class="screen active" id="menu-screen">
+  <div class="menu-bg"></div>
+  <div class="menu-overlay"></div>
+  <div class="menu-content">
+    <div class="game-title">Elementos<br>da Natureza</div>
+    <div class="game-subtitle">O Destino Aguarda</div>
+    <div class="menu-buttons">
+      <button class="btn btn-primary" onclick="goToBattle()">⚔ START</button>
+      <button class="btn btn-secondary" onclick="goToGacha()">✦ ROLAR</button>
+      <button class="btn btn-danger" onclick="showExit()">✕ SAIR</button>
+    </div>
+  </div>
+</div>
+
+<!-- GACHA SCREEN -->
+<div class="screen" id="gacha-screen">
+  <div class="sky-bg">
+    <div class="stars-layer" id="starsLayer"></div>
+  </div>
+  <div class="gacha-layout">
+    <!-- LEFT: roll panel -->
+    <div class="gacha-left">
+      <div class="gacha-title">✦ PORTAL DOS<br>ELEMENTOS ✦</div>
+
+      <div class="orb-container">
+        <div class="orb" id="gachaOrb" onclick="rollGacha()">🌐</div>
+      </div>
+
+      <div class="result-display" id="resultDisplay">
+        <div class="result-element" id="resultElement">?</div>
+        <div class="result-rarity" id="resultRarity">Role para descobrir</div>
+      </div>
+
+      <button class="btn-roll" onclick="rollGacha()">▶ ROLAR</button>
+      <button class="btn-battle-element" id="btnBattleWithElement" onclick="battleWithSelected()" style="display:none;">⚔ BATALHAR</button>
+      <button class="btn-back" onclick="goToMenu()">← VOLTAR</button>
+    </div>
+
+    <!-- RIGHT: rarities -->
+    <div class="rarities-panel">
+      <div class="rarity-group rarity-rara">
+        <div class="rarity-header">
+          ◈ RARA
+          <span class="rarity-chance">40%</span>
+        </div>
+        <div class="rarity-elements">
+          <span class="element-tag">💧 Água</span>
+          <span class="element-tag">🌍 Terra</span>
+          <span class="element-tag">🔥 Fogo</span>
+          <span class="element-tag">💨 Ar</span>
+        </div>
+      </div>
+
+      <div class="rarity-group rarity-epica">
+        <div class="rarity-header">
+          ◈ ÉPICA
+          <span class="rarity-chance">20%</span>
+        </div>
+        <div class="rarity-elements">
+          <span class="element-tag">🌿 Planta</span>
+          <span class="element-tag">🌋 Magma</span>
+          <span class="element-tag">⚡ Luta</span>
+          <span class="element-tag">🏜 Areia</span>
+        </div>
+      </div>
+
+      <div class="rarity-group rarity-lendaria">
+        <div class="rarity-header">
+          ◈ LENDÁRIA
+          <span class="rarity-chance">10%</span>
+        </div>
+        <div class="rarity-elements">
+          <span class="element-tag">🧲 Magnetismo</span>
+          <span class="element-tag">⚙ Metal</span>
+          <span class="element-tag">⚡ Raio</span>
+          <span class="element-tag">🌑 Sombra</span>
+          <span class="element-tag">✨ Luz</span>
+        </div>
+      </div>
+
+      <div class="rarity-group rarity-mitica">
+        <div class="rarity-header">
+          ◈ MÍTICA
+          <span class="rarity-chance">6%</span>
+        </div>
+        <div class="rarity-elements">
+          <span class="element-tag">🌌 Espaço</span>
+          <span class="element-tag">🩸 Sangue</span>
+          <span class="element-tag">👾 Monstro</span>
+        </div>
+      </div>
+
+      <div class="rarity-group rarity-divina">
+        <div class="rarity-header">
+          ✦ DIVINA
+          <span class="rarity-chance">4%</span>
+        </div>
+        <div class="rarity-elements">
+          <span class="element-tag">⭐ Estrela</span>
+          <span class="element-tag">⏳ Tempo</span>
+          <span class="element-tag">🔮 Realidade</span>
+        </div>
+      </div>
+
+      <!-- Also show remaining % -->
+      <div style="text-align:right; font-size:0.6rem; color:rgba(255,255,255,0.2); letter-spacing:2px; padding:4px 6px;">
+        * restante 20% = raridades especiais combinadas
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BATTLE SCREEN -->
+<div class="screen" id="battle-screen">
+  <div class="battle-bg"></div>
+  <div class="ability-flash" id="abilityFlash"></div>
+  <div class="battle-arena">
+    <div class="battle-header">
+      <div class="battle-title">⚔ BATALHA DOS ELEMENTOS ⚔</div>
+    </div>
+
+    <div class="fighters">
+      <!-- Player -->
+      <div class="fighter-card" id="playerCard">
+        <div class="fighter-label">JOGADOR</div>
+        <span class="fighter-icon" id="playerIcon">⚡</span>
+        <div class="fighter-name" id="playerName" style="color:#a8ff78">—</div>
+        <div class="fighter-rarity" id="playerRarity">—</div>
+        <div class="hp-bar-container">
+          <div class="hp-bar" id="playerHpBar" style="width:100%; background: linear-gradient(90deg, #a8ff78, #4caf50);"></div>
+        </div>
+        <div class="hp-text" id="playerHpText">100 / 100</div>
+      </div>
+
+      <div class="vs-badge">VS</div>
+
+      <!-- Bot -->
+      <div class="fighter-card" id="botCard">
+        <div class="fighter-label">INIMIGO</div>
+        <span class="fighter-icon" id="botIcon">🔥</span>
+        <div class="fighter-name" id="botName" style="color:#ff7878">—</div>
+        <div class="fighter-rarity" id="botRarity">—</div>
+        <div class="hp-bar-container">
+          <div class="hp-bar" id="botHpBar" style="width:100%; background: linear-gradient(90deg, #ff7878, #cc2020);"></div>
+        </div>
+        <div class="hp-text" id="botHpText">100 / 100</div>
+      </div>
+    </div>
+
+    <!-- Battle log -->
+    <div class="battle-log" id="battleLog"></div>
+
+    <!-- Actions -->
+    <div class="battle-actions">
+      <button class="btn-attack" id="btnAttack" onclick="playerAttack()">
+        ⚔ ATACAR
+      </button>
+      <button class="btn-special" id="btnSpecial" onclick="playerSpecial()">
+        ✦ ESPECIAL
+        <span class="cooldown-badge" id="specialCooldownText">pronto</span>
+      </button>
+      <button class="btn-flee" onclick="fleeBattle()">↩ FUGIR</button>
+    </div>
+
+    <div class="battle-result-overlay" id="battleResult">
+      <div class="result-title" id="resultTitleMain">VITÓRIA!</div>
+      <div class="result-desc" id="resultDescMain">Seu elemento prevaleceu</div>
+      <div id="battleWinsCount" style="font-family:'Crimson Pro',serif;font-style:italic;font-size:0.85rem;color:rgba(255,255,255,0.35);letter-spacing:2px;margin-top:4px;"></div>
+      <div style="display:flex; gap:12px; margin-top:10px;">
+        <button class="btn btn-secondary" onclick="goToMenu()">← MENU</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== DATA ==========
+const ELEMENTS = {
+  rara: {
+    label: 'RARA', chance: 40, colorClass: 'color-rara',
+    elements: [
+      { name: 'Água', icon: '💧', atk: 18, def: 12, special: 'Maré Alta', specialDesc: 'Inunda o inimigo' },
+      { name: 'Terra', icon: '🌍', atk: 15, def: 18, special: 'Terremoto', specialDesc: 'Abala o chão' },
+      { name: 'Fogo', icon: '🔥', atk: 22, def: 8, special: 'Chama Explosiva', specialDesc: 'Queima tudo' },
+      { name: 'Ar', icon: '💨', atk: 16, def: 14, special: 'Tornado', specialDesc: 'Redemoinho feroz' },
+    ]
+  },
+  epica: {
+    label: 'ÉPICA', chance: 20, colorClass: 'color-epica',
+    elements: [
+      { name: 'Planta', icon: '🌿', atk: 20, def: 20, special: 'Raízes Venenosas', specialDesc: 'Envolve o inimigo' },
+      { name: 'Magma', icon: '🌋', atk: 28, def: 10, special: 'Erupção', specialDesc: 'Magma incandescente' },
+      { name: 'Luta', icon: '👊', atk: 25, def: 15, special: 'Golpe Fatal', specialDesc: 'Ataque devastador' },
+      { name: 'Areia', icon: '🏜', atk: 19, def: 19, special: 'Tempestade de Areia', specialDesc: 'Cega o inimigo' },
+    ]
+  },
+  lendaria: {
+    label: 'LENDÁRIA', chance: 10, colorClass: 'color-lendaria',
+    elements: [
+      { name: 'Magnetismo', icon: '🧲', atk: 30, def: 22, special: 'Campo Magnético', specialDesc: 'Distorce o campo' },
+      { name: 'Metal', icon: '⚙', atk: 25, def: 30, special: 'Lâmina de Aço', specialDesc: 'Corte perfeito' },
+      { name: 'Raio', icon: '⚡', atk: 38, def: 14, special: 'Tempestade Elétrica', specialDesc: 'Descarga máxima' },
+      { name: 'Sombra', icon: '🌑', atk: 33, def: 20, special: 'Obscuridade Total', specialDesc: 'Mergulha nas trevas' },
+      { name: 'Luz', icon: '✨', atk: 28, def: 28, special: 'Explosão Sagrada', specialDesc: 'Luz divina' },
+    ]
+  },
+  mitica: {
+    label: 'MÍTICA', chance: 6, colorClass: 'color-mitica',
+    elements: [
+      { name: 'Espaço', icon: '🌌', atk: 42, def: 30, special: 'Singularidade', specialDesc: 'Colapso gravitacional' },
+      { name: 'Sangue', icon: '🩸', atk: 45, def: 25, special: 'Dreno Vital', specialDesc: 'Absorve vida' },
+      { name: 'Monstro', icon: '👾', atk: 48, def: 28, special: 'Devour', specialDesc: 'Devora o inimigo' },
+    ]
+  },
+  divina: {
+    label: 'DIVINA', chance: 4, colorClass: 'color-divina',
+    elements: [
+      { name: 'Estrela', icon: '⭐', atk: 55, def: 35, special: 'Supernova', specialDesc: 'Explosão estelar' },
+      { name: 'Tempo', icon: '⏳', atk: 50, def: 45, special: 'Paradoxo Temporal', specialDesc: 'Rewind fatal' },
+      { name: 'Realidade', icon: '🔮', atk: 60, def: 40, special: 'Reescrever Destino', specialDesc: 'Altera a realidade' },
+    ]
+  }
+};
+
+// Remaining chance 20% = legendary/above combinations for variety
+// We'll distribute: rara 40, epica 20, lendaria 16, mitica 14, divina 10 for smoother
+
+// ========== STATE ==========
+let gameState = {
+  playerElement: null,
+  botElement: null,
+  playerHp: 100,
+  botHp: 100,
+  playerMaxHp: 100,
+  botMaxHp: 100,
+  specialCooldown: 0,
+  battleActive: false,
+  savedElement: null,
+  savedRarity: null,
+  // Inventory
+  inventory: [null, null, null, null, null], // up to 5 slots
+  slotRerolls: [0, 0, 0, 0, 0],             // how many times each slot was changed
+  unlockedSlots: 1,
+  totalWins: 0,
+  activeSlot: 0,
+  pendingRoll: null
+};
+
+const MAX_REROLLS = 80; // max element swaps per slot
+
+// Wins needed to unlock each extra slot
+const WINS_TO_UNLOCK = [0, 5, 10, 15, 20]; // slot 1 free, slot 2 at 5 wins, etc.
+
+// ========== UTILS ==========
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToMenu() {
+  showScreen('menu-screen');
+  renderInventory();
+}
+
+function showExit() {
+  document.getElementById('exitOverlay').classList.add('show');
+}
+function closeExit() {
+  document.getElementById('exitOverlay').classList.remove('show');
+}
+function confirmExit() {
+  document.body.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;font-family:'Cinzel',serif;color:rgba(255,255,255,0.3);letter-spacing:5px;font-size:0.9rem;flex-direction:column;gap:16px;">
+      <div style="font-size:2rem;opacity:0.5">✦</div>
+      <div>ATÉ A PRÓXIMA AVENTURA</div>
+    </div>
+  `;
+}
+
+// ========== INVENTORY RENDER ==========
+function renderInventory() {
+  const container = document.getElementById('invSlots');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const winsNeededNext = WINS_TO_UNLOCK[gameState.unlockedSlots];
+  const winsInfo = document.getElementById('invWinsInfo');
+  if (winsInfo) {
+    if (gameState.unlockedSlots < 5) {
+      const remaining = winsNeededNext - gameState.totalWins;
+      winsInfo.textContent = `— próximo slot em ${remaining} vitória(s)`;
+    } else {
+      winsInfo.textContent = '— máximo desbloqueado!';
+    }
+  }
+
+  for (let i = 0; i < 5; i++) {
+    const slot = document.createElement('div');
+    const unlocked = i < gameState.unlockedSlots;
+    const element = gameState.inventory[i];
+    const isActive = i === gameState.activeSlot && element;
+
+    if (!unlocked) {
+      slot.className = 'inv-slot locked';
+      const needed = WINS_TO_UNLOCK[i];
+      slot.title = `Desbloqueado com ${needed} vitórias`;
+    } else if (!element) {
+      slot.className = 'inv-slot empty';
+      slot.innerHTML = `<span style="font-size:1.4rem;opacity:0.2">+</span><span class="slot-name">vazio</span>`;
+      slot.title = 'Slot vazio — role um elemento e guarde aqui';
+    } else {
+      const rarClass = ELEMENTS[element.rarity].colorClass;
+      const rerolls = gameState.slotRerolls[i];
+      const isLocked = rerolls >= MAX_REROLLS;
+      const isActive = i === gameState.activeSlot && element;
+      slot.className = `inv-slot filled ${rarClass}${isActive ? ' selected' : ''}${isLocked ? ' slot-maxed' : ''}`;
+      const remaining = MAX_REROLLS - rerolls;
+      slot.innerHTML = `
+        <span class="slot-icon">${element.icon}</span>
+        <span class="slot-name">${element.name}</span>
+        <span class="slot-badge ${rarClass}">${ELEMENTS[element.rarity].label.slice(0,3)}</span>
+        <span class="slot-reroll-count ${isLocked ? 'maxed' : ''}">${isLocked ? '🔒MAX' : remaining + '↺'}</span>
+      `;
+      slot.title = isLocked
+        ? `${element.name} — Slot bloqueado (${MAX_REROLLS} trocas usadas)`
+        : `${element.name} [${ELEMENTS[element.rarity].label}] — ${remaining} trocas restantes — Clique para selecionar`;
+      slot.onclick = () => selectSlot(i);
+    }
+    container.appendChild(slot);
+  }
+}
+
+function renderGachaInv() {
+  const container = document.getElementById('gachaInvSlots');
+  if (!container) return;
+  container.innerHTML = '';
+
+  for (let i = 0; i < 5; i++) {
+    const slot = document.createElement('div');
+    const unlocked = i < gameState.unlockedSlots;
+    const element = gameState.inventory[i];
+
+    if (!unlocked) {
+      slot.className = 'gacha-inv-slot locked';
+      slot.title = `Bloqueado — ${WINS_TO_UNLOCK[i]} vitórias`;
+    } else if (!element) {
+      slot.className = 'gacha-inv-slot empty';
+      slot.innerHTML = `<span style="font-size:0.8rem;opacity:0.25">+</span>`;
+      slot.title = 'Slot vazio — clique para guardar o elemento rolado';
+      slot.onclick = () => saveRollToSlot(i);
+    } else {
+      const rarClass = ELEMENTS[element.rarity].colorClass;
+      const isActive = i === gameState.activeSlot;
+      const rerolls = gameState.slotRerolls[i];
+      const isMaxed = rerolls >= MAX_REROLLS;
+      slot.className = `gacha-inv-slot filled ${rarClass}${isActive ? ' active-slot' : ''}${isMaxed ? ' gacha-slot-maxed' : ''}`;
+      const remaining = MAX_REROLLS - rerolls;
+      slot.innerHTML = `
+        <span class="gs-icon">${element.icon}</span>
+        <span class="gs-name">${element.name}</span>
+        <span class="gs-reroll ${isMaxed ? 'gs-maxed' : ''}">${isMaxed ? '🔒' : remaining + '↺'}</span>
+      `;
+      slot.title = isMaxed
+        ? `${element.name} — Bloqueado (${MAX_REROLLS}/80 trocas)`
+        : `${element.name} — ${remaining} trocas restantes — clique para substituir`;
+      if (!isMaxed) slot.onclick = () => saveRollToSlot(i);
+    }
+    container.appendChild(slot);
+  }
+}
+
+function selectSlot(i) {
+  if (i >= gameState.unlockedSlots) return;
+  if (!gameState.inventory[i]) return;
+  gameState.activeSlot = i;
+  gameState.savedElement = gameState.inventory[i];
+  gameState.savedRarity = gameState.inventory[i].rarity;
+  renderInventory();
+
+  // Flash selection
+  const slots = document.querySelectorAll('.inv-slot');
+  slots[i]?.classList.add('selected');
+}
+
+function saveRollToSlot(i) {
+  if (i >= gameState.unlockedSlots) return;
+  if (!gameState.pendingRoll) return;
+  // Block if slot already has element and hit max rerolls
+  if (gameState.inventory[i] !== null && gameState.slotRerolls[i] >= MAX_REROLLS) {
+    showUnlockToast(`🔒 Slot ${i+1} bloqueado — limite de ${MAX_REROLLS} trocas atingido!`);
+    return;
+  }
+  // Count the swap only if slot already had an element
+  if (gameState.inventory[i] !== null) {
+    gameState.slotRerolls[i]++;
+  }
+  gameState.inventory[i] = { ...gameState.pendingRoll };
+  gameState.activeSlot = i;
+  gameState.savedElement = gameState.inventory[i];
+  gameState.savedRarity = gameState.inventory[i].rarity;
+  renderGachaInv();
+  // Update battle button
+  const battleBtn = document.getElementById('btnBattleWithElement');
+  if (battleBtn) {
+    battleBtn.style.display = 'block';
+    const data = ELEMENTS[gameState.savedRarity];
+    battleBtn.textContent = `⚔ BATALHAR COM ${gameState.savedElement.name.toUpperCase()}`;
+    battleBtn.className = `btn-battle-element ${data.colorClass}`;
+  }
+  // Warn when close to limit
+  const remaining = MAX_REROLLS - gameState.slotRerolls[i];
+  if (remaining <= 10 && remaining > 0) {
+    showUnlockToast(`⚠ Slot ${i+1}: apenas ${remaining} troca(s) restante(s)!`);
+  } else if (remaining === 0) {
+    showUnlockToast(`🔒 Slot ${i+1} está agora BLOQUEADO — ${MAX_REROLLS} trocas usadas!`);
+  }
+}
+
+function battleWithSelected() {
+  if (!gameState.savedElement) return;
+  goToBattle();
+}
+
+function showUnlockToast(msg) {
+  const t = document.getElementById('unlockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ========== AUDIO ==========
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+let musicNodes = {};
+let musicPlaying = false;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  return audioCtx;
+}
+
+function startMusic() {
+  if (musicPlaying) return;
+  musicPlaying = true;
+  const ctx = getAudioCtx();
+
+  // Master gain
+  const master = ctx.createGain();
+  master.gain.setValueAtTime(0.18, ctx.currentTime);
+  master.connect(ctx.destination);
+
+  // Compressor for punch
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -20;
+  comp.knee.value = 10;
+  comp.ratio.value = 4;
+  comp.attack.value = 0.003;
+  comp.release.value = 0.1;
+  comp.connect(master);
+
+  const bpm = 138;
+  const beat = 60 / bpm;
+  const bar = beat * 4;
+
+  // ---- DRUMS ----
+  function kick(time) {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(comp);
+    o.frequency.setValueAtTime(160, time);
+    o.frequency.exponentialRampToValueAtTime(40, time + 0.12);
+    g.gain.setValueAtTime(1.2, time);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+    o.start(time); o.stop(time + 0.25);
+  }
+
+  function snare(time) {
+    // noise burst
+    const bufLen = ctx.sampleRate * 0.12;
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let k = 0; k < bufLen; k++) data[k] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const bandpass = ctx.createBiquadFilter();
+    bandpass.type = 'bandpass';
+    bandpass.frequency.value = 1800;
+    bandpass.Q.value = 0.8;
+    const g = ctx.createGain();
+    src.connect(bandpass); bandpass.connect(g); g.connect(comp);
+    g.gain.setValueAtTime(0.6, time);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
+    src.start(time); src.stop(time + 0.12);
+  }
+
+  function hihat(time, accent) {
+    const bufLen = ctx.sampleRate * 0.04;
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let k = 0; k < bufLen; k++) data[k] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 7000;
+    const g = ctx.createGain();
+    src.connect(hp); hp.connect(g); g.connect(comp);
+    g.gain.setValueAtTime(accent ? 0.35 : 0.18, time);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.04);
+    src.start(time); src.stop(time + 0.05);
+  }
+
+  // ---- BASS ----
+  function bass(time, freq, dur) {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 280;
+    o.type = 'sawtooth';
+    o.connect(lp); lp.connect(g); g.connect(comp);
+    o.frequency.setValueAtTime(freq, time);
+    g.gain.setValueAtTime(0.5, time);
+    g.gain.setValueAtTime(0.5, time + dur * 0.7);
+    g.gain.linearRampToValueAtTime(0, time + dur);
+    o.start(time); o.stop(time + dur + 0.01);
+  }
+
+  // ---- LEAD SYNTH ----
+  function lead(time, freq, dur, vol=0.3) {
+    const o = ctx.createOscillator();
+    const o2 = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'square'; o2.type = 'sawtooth';
+    o.frequency.value = freq;
+    o2.frequency.value = freq * 1.005; // slight detune
+    o.connect(g); o2.connect(g); g.connect(comp);
+    g.gain.setValueAtTime(0, time);
+    g.gain.linearRampToValueAtTime(vol, time + 0.01);
+    g.gain.setValueAtTime(vol, time + dur * 0.6);
+    g.gain.linearRampToValueAtTime(0, time + dur);
+    o.start(time); o2.start(time);
+    o.stop(time + dur + 0.01); o2.stop(time + dur + 0.01);
+  }
+
+  // ---- PAD / ATMOSPHERE ----
+  function pad(time, freq, dur) {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.value = freq;
+    const reverb = ctx.createConvolver();
+    // simple impulse reverb
+    const irLen = ctx.sampleRate * 1.5;
+    const ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+      const d = ir.getChannelData(ch);
+      for (let k = 0; k < irLen; k++) d[k] = (Math.random()*2-1) * Math.pow(1 - k/irLen, 2);
+    }
+    reverb.buffer = ir;
+    o.connect(g); g.connect(reverb); reverb.connect(master);
+    g.gain.setValueAtTime(0, time);
+    g.gain.linearRampToValueAtTime(0.08, time + 0.3);
+    g.gain.setValueAtTime(0.08, time + dur - 0.3);
+    g.gain.linearRampToValueAtTime(0, time + dur);
+    o.start(time); o.stop(time + dur);
+  }
+
+  // ---- SEQUENCE ----
+  // Action/epic loop: 2-bar pattern, looping every 8 beats
+  const bassLine  = [110, 110, 138.6, 110, 130.8, 110, 123.5, 110];
+  const leadNotes = [440, 0, 523, 494, 0, 440, 392, 523];
+  const padNotes  = [220, 261.6, 246.9, 220];
+
+  let startTime = ctx.currentTime + 0.1;
+  const loopLen = bar * 2; // 2 bars
+
+  function scheduleLoop(t) {
+    for (let i = 0; i < 8; i++) {
+      const bt = t + i * beat;
+      // kick: 1 3 5 7 (every beat) + extra on off-beats
+      kick(bt);
+      if (i % 2 === 0) kick(bt + beat * 0.75);
+      // snare: beats 2 and 4
+      if (i === 1 || i === 3 || i === 5 || i === 7) snare(bt);
+      // hihats every 8th note
+      hihat(bt, true);
+      hihat(bt + beat * 0.5, false);
+      // bass
+      bass(bt, bassLine[i], beat * 0.85);
+      // lead melody
+      if (leadNotes[i] > 0) lead(bt, leadNotes[i], beat * 0.7);
+    }
+    // pad chord every 2 bars
+    pad(t, padNotes[0], bar);
+    pad(t + bar, padNotes[2], bar);
+
+    // Schedule next loop
+    const nextLoopId = setTimeout(() => {
+      if (musicPlaying) scheduleLoop(t + loopLen);
+    }, (loopLen - 0.1) * 1000);
+    musicNodes.loopTimer = nextLoopId;
+  }
+
+  scheduleLoop(startTime);
+}
+
+function stopMusic() {
+  musicPlaying = false;
+  if (musicNodes.loopTimer) clearTimeout(musicNodes.loopTimer);
+  if (audioCtx) {
+    audioCtx.close();
+    audioCtx = null;
+  }
+}
+
+function playBling(rarity) {
+  const ctx = getAudioCtx();
+
+  // Sparkle bling: ascending shimmer based on rarity
+  const rarityFreqs = {
+    rara:     [880, 1108, 1318, 1760],
+    epica:    [932, 1244, 1480, 1976],
+    lendaria: [987, 1318, 1760, 2349],
+    mitica:   [1046, 1396, 1864, 2489],
+    divina:   [1174, 1568, 2093, 2794]
+  };
+  const freqs = rarityFreqs[rarity] || rarityFreqs.rara;
+
+  // Shimmer envelope
+  freqs.forEach((f, idx) => {
+    const delay = idx * 0.07;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.value = f;
+    o.connect(g); g.connect(ctx.destination);
+    const t = ctx.currentTime + delay;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.22, t + 0.03);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    o.start(t); o.stop(t + 0.36);
+  });
+
+  // Extra sparkle noise burst for divine/mitica
+  if (rarity === 'divina' || rarity === 'mitica') {
+    const bufLen = ctx.sampleRate * 0.15;
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let k = 0; k < bufLen; k++) data[k] = (Math.random()*2-1) * Math.pow(1-k/bufLen,1.5);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass'; hp.frequency.value = 6000;
+    const g = ctx.createGain();
+    src.connect(hp); hp.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(rarity === 'divina' ? 0.4 : 0.2, ctx.currentTime + 0.1);
+    src.start(ctx.currentTime + 0.1);
+    src.stop(ctx.currentTime + 0.26);
+  }
+}
+
+// Start music on first interaction
+document.addEventListener('click', function startOnInteract() {
+  startMusic();
+  document.removeEventListener('click', startOnInteract);
+}, { once: true });
+function generateStars() {
+  const layer = document.getElementById('starsLayer');
+  if (!layer) return;
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star-particle';
+    const size = Math.random() * 3 + 1;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --d:${(Math.random()*4+2).toFixed(1)}s;
+      --o:${(Math.random()*0.8+0.2).toFixed(2)};
+      animation-delay:${(Math.random()*5).toFixed(1)}s;
+    `;
+    layer.appendChild(s);
+  }
+}
+generateStars();
+
+// ========== GACHA ==========
+function goToGacha() {
+  showScreen('gacha-screen');
+  resetResult();
+}
+
+function resetResult() {
+  const el = document.getElementById('resultElement');
+  const rar = document.getElementById('resultRarity');
+  const battleBtn = document.getElementById('btnBattleWithElement');
+
+  if (gameState.savedElement) {
+    const data = ELEMENTS[gameState.savedRarity];
+    el.textContent = `${gameState.savedElement.icon} ${gameState.savedElement.name}`;
+    el.className = `result-element ${data.colorClass} clickable-result`;
+    rar.textContent = `✦ ${data.label} ✦`;
+    rar.className = `result-rarity ${data.colorClass}`;
+    if (battleBtn) {
+      battleBtn.style.display = 'block';
+      battleBtn.textContent = `⚔ BATALHAR COM ${gameState.savedElement.name.toUpperCase()}`;
+      battleBtn.className = `btn-battle-element ${data.colorClass}`;
+    }
+    document.getElementById('gachaOrb').textContent = gameState.savedElement.icon;
+    // Make the result element clickable to re-roll
+    el.onclick = () => rollGacha();
+    el.title = 'Clique para rolar de novo!';
+  } else {
+    el.textContent = '?';
+    el.className = 'result-element';
+    el.onclick = null;
+    el.title = '';
+    rar.textContent = 'Role para descobrir';
+    rar.className = 'result-rarity';
+    if (battleBtn) battleBtn.style.display = 'none';
+  }
+  setTimeout(() => { el.classList.add('show'); rar.classList.add('show'); }, 100);
+}
+
+function rollGacha() {
+  const orb = document.getElementById('gachaOrb');
+  const el = document.getElementById('resultElement');
+  const rar = document.getElementById('resultRarity');
+  const battleBtn = document.getElementById('btnBattleWithElement');
+
+  el.classList.remove('show');
+  rar.classList.remove('show');
+  el.onclick = null;
+  if (battleBtn) battleBtn.style.display = 'none';
+  orb.classList.remove('rolling');
+  void orb.offsetWidth;
+  orb.classList.add('rolling');
+
+  setTimeout(() => {
+    const { rarity, element } = pickRandom();
+    const data = ELEMENTS[rarity];
+
+    // Always replace whatever was there
+    gameState.savedElement = { ...element, rarity };
+    gameState.savedRarity = rarity;
+
+    orb.textContent = element.icon;
+    el.textContent = `${element.icon} ${element.name}`;
+    el.className = `result-element ${data.colorClass} clickable-result`;
+    el.onclick = () => rollGacha();
+    el.title = 'Clique para rolar de novo!';
+    rar.textContent = `✦ ${data.label} ✦`;
+    rar.className = `result-rarity ${data.colorClass}`;
+
+    setTimeout(() => {
+      el.classList.add('show');
+      rar.classList.add('show');
+      playBling(rarity);
+      if (battleBtn) {
+        battleBtn.style.display = 'block';
+        battleBtn.textContent = `⚔ BATALHAR COM ${element.name.toUpperCase()}`;
+        battleBtn.className = `btn-battle-element ${data.colorClass}`;
+      }
+    }, 100);
+
+    if (rarity === 'divina') rainbowBurst();
+  }, 800);
+}
+
+function pickRandom() {
+  const roll = Math.random() * 100;
+  let rarity;
+  if (roll < 40) rarity = 'rara';
+  else if (roll < 60) rarity = 'epica';
+  else if (roll < 76) rarity = 'lendaria';
+  else if (roll < 90) rarity = 'mitica';
+  else rarity = 'divina';
+  const elements = ELEMENTS[rarity].elements;
+  const element = elements[Math.floor(Math.random() * elements.length)];
+  return { rarity, element };
+}
+
+function rainbowBurst() {
+  const orb = document.getElementById('gachaOrb');
+  orb.style.boxShadow = '0 0 100px rgba(255,249,196,1), 0 0 200px rgba(255,200,50,0.8), 0 0 300px rgba(255,150,50,0.5)';
+  setTimeout(() => { orb.style.boxShadow = ''; }, 2000);
+}
+
+// ========== BATTLE ==========
+function getHpMax(rarity) {
+  const bases = { rara: 120, epica: 140, lendaria: 170, mitica: 200, divina: 250 };
+  return bases[rarity] || 120;
+}
+
+function goToBattle() {
+  let player;
+  if (gameState.savedElement) {
+    player = { rarity: gameState.savedRarity, element: gameState.savedElement };
+  } else {
+    player = pickRandom();
+  }
+  const bot = pickRandom();
+
+  gameState.playerElement = { ...player.element, rarity: player.rarity };
+  gameState.botElement = { ...bot.element, rarity: bot.rarity };
+  gameState.playerHp = getHpMax(player.rarity);
+  gameState.playerMaxHp = gameState.playerHp;
+  gameState.botHp = getHpMax(bot.rarity);
+  gameState.botMaxHp = gameState.botHp;
+  gameState.specialCooldown = 0;
+  gameState.battleActive = true;
+
+  document.getElementById('playerIcon').textContent = player.element.icon;
+  document.getElementById('playerName').textContent = player.element.name;
+  document.getElementById('playerRarity').textContent = `✦ ${ELEMENTS[player.rarity].label}`;
+  document.getElementById('playerRarity').className = `fighter-rarity ${ELEMENTS[player.rarity].colorClass}`;
+
+  document.getElementById('botIcon').textContent = bot.element.icon;
+  document.getElementById('botName').textContent = bot.element.name;
+  document.getElementById('botRarity').textContent = `✦ ${ELEMENTS[bot.rarity].label}`;
+  document.getElementById('botRarity').className = `fighter-rarity ${ELEMENTS[bot.rarity].colorClass}`;
+
+  document.getElementById('battleResult').classList.remove('show');
+  document.getElementById('battleLog').innerHTML = '';
+  updateHpBars();
+  updateSpecialBtn();
+  showScreen('battle-screen');
+
+  addLog('system', `⚔ A batalha começa! ${player.element.name} vs ${bot.element.name}!`);
+  setTimeout(() => {
+    addLog('system', `Seu elemento: ${player.element.icon} ${player.element.name} [${ELEMENTS[player.rarity].label}] — ATK:${player.element.atk} DEF:${player.element.def}`);
+  }, 400);
+}
+
+function updateHpBars() {
+  const pPct = Math.max(0, (gameState.playerHp / gameState.playerMaxHp) * 100);
+  const bPct = Math.max(0, (gameState.botHp / gameState.botMaxHp) * 100);
+  document.getElementById('playerHpBar').style.width = pPct + '%';
+  document.getElementById('botHpBar').style.width = bPct + '%';
+  document.getElementById('playerHpText').textContent = `${Math.max(0,gameState.playerHp)} / ${gameState.playerMaxHp}`;
+  document.getElementById('botHpText').textContent = `${Math.max(0,gameState.botHp)} / ${gameState.botMaxHp}`;
+  const pBar = document.getElementById('playerHpBar');
+  if (pPct > 50) pBar.style.background = 'linear-gradient(90deg, #a8ff78, #4caf50)';
+  else if (pPct > 25) pBar.style.background = 'linear-gradient(90deg, #ffe082, #ff9800)';
+  else pBar.style.background = 'linear-gradient(90deg, #ff7878, #cc2020)';
+}
+
+function updateSpecialBtn() {
+  const btn = document.getElementById('btnSpecial');
+  const txt = document.getElementById('specialCooldownText');
+  if (gameState.specialCooldown > 0) {
+    btn.disabled = true;
+    txt.textContent = `${gameState.specialCooldown} turno(s)`;
+  } else {
+    btn.disabled = false;
+    txt.textContent = 'pronto';
+  }
+}
+
+function addLog(type, msg) {
+  const log = document.getElementById('battleLog');
+  const div = document.createElement('div');
+  div.className = `log-entry log-${type}`;
+  div.textContent = msg;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+function calcDamage(attacker, defender, multiplier = 1) {
+  const base = attacker.atk * multiplier;
+  const reduction = defender.def * 0.3;
+  const variation = 0.85 + Math.random() * 0.3;
+  return Math.max(1, Math.round((base - reduction) * variation));
+}
+
+function setActionButtons(enabled) {
+  document.getElementById('btnAttack').disabled = !enabled;
+  if (gameState.specialCooldown === 0) document.getElementById('btnSpecial').disabled = !enabled;
+}
+
+function showAbilityFlash(text, colorClass) {
+  const fl = document.getElementById('abilityFlash');
+  fl.textContent = text;
+  fl.className = `ability-flash ${colorClass}`;
+  void fl.offsetWidth;
+  fl.classList.add('show');
+  setTimeout(() => fl.classList.remove('show'), 1200);
+}
+
+function playerAttack() {
+  if (!gameState.battleActive) return;
+  setActionButtons(false);
+  const dmg = calcDamage(gameState.playerElement, gameState.botElement);
+  const isCrit = Math.random() < 0.15;
+  const finalDmg = isCrit ? Math.round(dmg * 1.5) : dmg;
+  gameState.botHp -= finalDmg;
+  updateHpBars();
+  document.getElementById('botCard').classList.add('shake');
+  setTimeout(() => document.getElementById('botCard').classList.remove('shake'), 400);
+  if (isCrit) {
+    addLog('critical', `💥 CRÍTICO! ${gameState.playerElement.icon} ${gameState.playerElement.name} causou ${finalDmg} de dano!`);
+    showAbilityFlash('⚡ CRÍTICO!', ELEMENTS[gameState.playerElement.rarity].colorClass);
+  } else {
+    addLog('player', `${gameState.playerElement.icon} ${gameState.playerElement.name} atacou causando ${finalDmg} de dano.`);
+  }
+  if (gameState.specialCooldown > 0) gameState.specialCooldown--;
+  updateSpecialBtn();
+  if (gameState.botHp <= 0) { endBattle(true); return; }
+  setTimeout(() => botTurn(), 900);
+}
+
+function playerSpecial() {
+  if (!gameState.battleActive || gameState.specialCooldown > 0) return;
+  setActionButtons(false);
+  const dmg = calcDamage(gameState.playerElement, gameState.botElement, 2.2);
+  gameState.botHp -= dmg;
+  gameState.specialCooldown = 3;
+  updateHpBars();
+  updateSpecialBtn();
+  document.getElementById('botCard').classList.add('shake');
+  setTimeout(() => document.getElementById('botCard').classList.remove('shake'), 400);
+  showAbilityFlash(`✦ ${gameState.playerElement.special}!`, ELEMENTS[gameState.playerElement.rarity].colorClass);
+  addLog('critical', `✦ ${gameState.playerElement.icon} usa ${gameState.playerElement.special}! Causa ${dmg} de dano massivo!`);
+  if (gameState.botHp <= 0) { endBattle(true); return; }
+  setTimeout(() => botTurn(), 1100);
+}
+
+function botTurn() {
+  if (!gameState.battleActive) return;
+  const useSpecial = Math.random() < 0.3;
+  let dmg, msg;
+  if (useSpecial) {
+    dmg = calcDamage(gameState.botElement, gameState.playerElement, 1.8);
+    msg = `💀 ${gameState.botElement.icon} usa ${gameState.botElement.special}! Causa ${dmg} de dano!`;
+    showAbilityFlash(`☠ ${gameState.botElement.special}`, 'color-mitica');
+  } else {
+    dmg = calcDamage(gameState.botElement, gameState.playerElement);
+    const isCrit = Math.random() < 0.1;
+    if (isCrit) { dmg = Math.round(dmg * 1.4); msg = `💥 CRÍTICO INIMIGO! ${gameState.botElement.icon} causou ${dmg} de dano!`; }
+    else msg = `${gameState.botElement.icon} ${gameState.botElement.name} atacou causando ${dmg} de dano.`;
+  }
+  gameState.playerHp -= dmg;
+  updateHpBars();
+  document.getElementById('playerCard').classList.add('shake');
+  setTimeout(() => document.getElementById('playerCard').classList.remove('shake'), 400);
+  addLog('bot', msg);
+  if (gameState.playerHp <= 0) { endBattle(false); return; }
+  setActionButtons(true);
+}
+
+function endBattle(playerWon) {
+  gameState.battleActive = false;
+  setActionButtons(false);
+
+  // Element is consumed after battle — not kept forever
+  gameState.savedElement = null;
+  gameState.savedRarity = null;
+
+  if (playerWon) {
+    gameState.totalWins++;
+    // Check slot unlock
+    const newUnlock = WINS_TO_UNLOCK.findIndex((w, i) => i >= gameState.unlockedSlots && gameState.totalWins >= w);
+    if (newUnlock !== -1 && newUnlock < 5 && newUnlock >= gameState.unlockedSlots) {
+      gameState.unlockedSlots = newUnlock + 1;
+      setTimeout(() => showUnlockToast(`🔓 SLOT ${gameState.unlockedSlots} DESBLOQUEADO! (${gameState.totalWins} vitórias)`), 800);
+    }
+  }
+
+  setTimeout(() => {
+    const overlay = document.getElementById('battleResult');
+    const title = document.getElementById('resultTitleMain');
+    const desc = document.getElementById('resultDescMain');
+    const winsEl = document.getElementById('battleWinsCount');
+
+    if (playerWon) {
+      title.textContent = '✦ VITÓRIA! ✦';
+      title.className = 'result-title result-win';
+      desc.textContent = `${gameState.playerElement.name} derrotou ${gameState.botElement.name}`;
+      addLog('critical', `🏆 VITÓRIA! ${gameState.playerElement.icon} ${gameState.playerElement.name} prevaleceu!`);
+    } else {
+      title.textContent = '✖ DERROTA';
+      title.className = 'result-title result-lose';
+      desc.textContent = `${gameState.botElement.name} foi mais forte dessa vez`;
+      addLog('bot', `💀 DERROTA. ${gameState.botElement.icon} ${gameState.botElement.name} venceu.`);
+    }
+    if (winsEl) winsEl.textContent = `Vitórias totais: ${gameState.totalWins}`;
+    overlay.classList.add('show');
+  }, 600);
+}
+
+function fleeBattle() {
+  if (!gameState.battleActive) return;
+  gameState.battleActive = false;
+  addLog('system', '↩ Você fugiu da batalha...');
+  setTimeout(() => goToMenu(), 800);
+}
+
+function restartBattle() {
+  document.getElementById('battleResult').classList.remove('show');
+  setTimeout(() => goToBattle(), 200);
+}
+
+// Init
+renderInventory();
+resetResult();
+</script>
+</body>
+</html>
