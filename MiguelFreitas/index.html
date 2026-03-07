@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>STACK - Launch Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com');
+        body { display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #050505; color: white; font-family: 'Orbitron', sans-serif; overflow: hidden; }
+        #game-container { position: relative; width: 600px; height: 750px; }
+        canvas { border: 4px solid #111; background: #000; display: none; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.95); z-index: 20; }
+        h1 { font-size: 80px; color: #00ffcc; text-shadow: 0 0 20px #00ffcc; margin-bottom: 10px; }
+        #high-score-board { color: #ff0055; font-size: 18px; margin-bottom: 30px; letter-spacing: 2px; }
+        .btn { padding: 15px 40px; margin: 10px; font-size: 18px; background: transparent; border: 2px solid #00ffcc; color: #00ffcc; cursor: pointer; transition: 0.3s; width: 260px; font-family: 'Orbitron'; font-weight: bold; }
+        .btn:hover { background: #00ffcc; color: #000; box-shadow: 0 0 25px #00ffcc; }
+        #ui { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; z-index: 15; display: none; }
+        #combo-msg { color: #ffff00; font-size: 20px; opacity: 0; transition: 0.4s; text-shadow: 0 0 10px #ffff00; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <!-- UI Durante o Jogo -->
+        <div id="ui">
+            <div id="score-val" style="font-size: 50px; font-weight: bold;">0</div>
+            <div id="combo-msg">COMBO! +TAMANHO</div>
+        </div>
+
+        <!-- Menu Principal -->
+        <div id="main-menu" class="overlay">
+            <h1>STACK</h1>
+            <div id="high-score-board">RECORDE: 0</div>
+            <button class="btn" onclick="startGame()">INICIAR MISSÃO</button>
+            <button class="btn" onclick="toggleSettings()">DIFICULDADE</button>
+        </div>
+
+        <!-- Menu Definições -->
+        <div id="settings-menu" class="overlay" style="display:none;">
+            <h2 style="color: #00ffcc;">SELECIONAR NÍVEL</h2>
+            <button class="btn" onclick="setDiff(3.5, 0.01, 'RELAXADO')">RELAXADO</button>
+            <button class="btn" onclick="setDiff(5, 0.02, 'NORMAL')">NORMAL</button>
+            <button class="btn" onclick="setDiff(7.5, 0.04, 'INSANO')">INSANO</button>
+            <button class="btn" style="border-color: #ff0055; color: #ff0055;" onclick="toggleSettings()">VOLTAR</button>
+        </div>
+
+        <canvas id="game" width="600" height="750"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('game'), ctx = canvas.getContext('2d');
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        let blockW = 220, blockH = 45, speedBase = 5, speed = 5;
+        let currentX = 0, currentY = 0, blocks = [], obstacles = [], particles = [], score = 0;
+        let gameActive = false, flash = 0, comboCount = 0, obsProb = 0.02;
+
+        // Carregar Recorde ao Iniciar
+        function updateHighScoreDisplay() {
+            const hs = localStorage.getItem('stackHighScore') || 0;
+            document.getElementById('high-score-board').innerText = "RECORDE: " + hs;
+        }
+        updateHighScoreDisplay();
+
+        function setDiff(s, prob, label) { 
+            speedBase = s; obsProb = prob; 
+            console.log("Dificuldade: " + label);
+            toggleSettings(); 
+        }
+
+        function toggleSettings() { 
+            const s = document.getElementById('settings-menu'); 
+            s.style.display = s.style.display === 'none' ? 'flex' : 'none'; 
+        }
+
+        function startGame() {
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('ui').style.display = 'block';
+            canvas.style.display = 'block';
+            resetGame();
+        }
+
+        function resetGame() {
+            blocks = []; obstacles = []; particles = []; score = 0; blockW = 220; speed = speedBase;
+            currentY = canvas.height - 120; gameActive = true; comboCount = 0;
+            document.getElementById('score-val').innerText = "0";
+            requestAnimationFrame(update);
+        }
+
+        function createExplosion(x, y) {
+            for(let i=0; i<12; i++) {
+                particles.push({x, y, vx: (Math.random()-0.5)*12, vy: (Math.random()-0.5)*12, life: 1});
+            }
+        }
+
+        function update() {
+            if(!gameActive) return;
+            ctx.clearRect(0,0,600,750);
+
+            // Obstáculos Espalhados Aleatórios
+            if(Math.random() < obsProb) obstacles.push({x: 600, y: Math.random() * (canvas.height - 200) + 50, s: Math.random()*5+4});
+            
+            obstacles.forEach((o, i) => {
+                o.x -= o.s;
+                ctx.fillStyle = "#ff0055"; ctx.beginPath(); ctx.arc(o.x, o.y, 10, 0, Math.PI*2); ctx.fill();
+                if(o.x < currentX + blockW && o.x > currentX && o.y < currentY + blockH && o.y > currentY) {
+                    createExplosion(o.x, o.y);
+                    blockW = Math.max(40, blockW - 30);
+                    score = Math.max(0, score - 20);
+                    document.getElementById('score-val').innerText = score;
+                    obstacles.splice(i, 1);
+                }
+            });
+
+            // Partículas de Explosão
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy; p.life -= 0.03;
+                ctx.fillStyle = `rgba(255, 0, 85, ${p.life})`;
+                ctx.fillRect(p.x, p.y, 5, 5);
+                if(p.life <= 0) particles.splice(i, 1);
+            });
+
+            // Guia Visual Neon
+            if(blocks.length > 0) {
+                ctx.fillStyle = "rgba(0, 255, 204, 0.06)";
+                ctx.fillRect(blocks[blocks.length-1].x, 0, blocks[blocks.length-1].w, 750);
+            }
+
+            // Desenhar Pilha
+            blocks.forEach((b, i) => {
+                ctx.fillStyle = `hsl(${i*18 + 170}, 80%, 50%)`;
+                ctx.fillRect(b.x, b.y, b.w, blockH);
+                ctx.strokeStyle = "rgba(255,255,255,0.4)"; ctx.strokeRect(b.x+2, b.y+2, b.w-4, blockH-4);
+            });
+
+            // Bloco em Movimento
+            ctx.fillStyle = flash > 0 ? "white" : "#00ffcc";
+            if(flash > 0) flash -= 0.15;
+            ctx.fillRect(currentX, currentY, blockW, blockH);
+
+            currentX += speed;
+            if(currentX + blockW > 600 || currentX < 0) speed *= -1;
+            requestAnimationFrame(update);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if(e.code === 'Space' && gameActive) {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                flash = 1;
+                let last = blocks[blocks.length-1];
+                
+                if(blocks.length > 0) {
+                    let diff = Math.abs(currentX - last.x);
+                    if(currentX + blockW < last.x || currentX > last.x + blockW) {
+                        handleGameOver(); return;
+                    }
+                    score += Math.max(0, 50 - Math.floor(diff/2));
+                    
+                    if(diff < 15) { // Combo Check
+                        comboCount++;
+                        if(comboCount >= 3) {
+                            blockW = Math.min(250, blockW + 40); comboCount = 0;
+                            const m = document.getElementById('combo-msg'); m.style.opacity = 1; setTimeout(()=>m.style.opacity=0, 800);
+                        }
+                    } else comboCount = 0;
+                } else score += 50;
+
+                document.getElementById('score-val').innerText = score;
+                blocks.push({x: currentX, y: currentY, w: blockW});
+
+                // Movimentação de Câmara
+                if(blocks.length > 9) blocks.forEach(b => b.y += blockH);
+                else currentY -= blockH;
+
+                currentX = 0;
+                speed = (speed > 0 ? speed + 0.25 : speed - 0.25);
+                blockW = Math.max(40, blockW - 6);
+            }
+        });
+
+        function handleGameOver() {
+            gameActive = false;
+            const currentHigh = localStorage.getItem('stackHighScore') || 0;
+            if (score > currentHigh) {
+                localStorage.setItem('stackHighScore', score);
+                alert("NOVO RECORDE: " + score);
+            } else {
+                alert("FIM DE JOGO! PONTOS: " + score);
+            }
+            updateHighScoreDisplay();
+            document.getElementById('main-menu').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
+
