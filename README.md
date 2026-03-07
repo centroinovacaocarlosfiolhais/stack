@@ -19,8 +19,8 @@ O desafio estrutura-se em torno da **Framework STEP do CICF** — um ciclo de ap
 
 | Ficheiro | Descrição |
 |---|---|
-| `cicf-stack-game.html` | Jogo de referência completo — PWA instalável, funciona offline |
-| `cicf-ficha-desafio.html` | Ficha de atividade para os participantes — guia de prompting, QA, carreiras, deploy |
+| `index.html` | Jogo de referência completo — PWA instalável, funciona offline |
+| `desafio.html` | Ficha de atividade para os participantes — guia de prompting, QA, carreiras, deploy |
 | `README.md` | Este ficheiro |
 
 Para jogar o jogo de referência ou ler a ficha, basta abrir o ficheiro `.html` diretamente no browser — não é necessário instalar nada.
