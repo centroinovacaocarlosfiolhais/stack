@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Elementese</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+:root{
+  --bg:#0a0a0f;--bg2:#12121e;--bg3:#1a1a2e;--border:#2a2a4a;
+  --gold:#f0c040;--gold2:#ffd700;--silver:#c0c8d8;
+  --text:#e8e0ff;--text2:#9090b0;
+  --rara:#4fc3f7;--epica:#ce93d8;--lendaria:#ffb74d;
+  --mitica:#ef9a9a;--divina:#fff176;--exclusiva:#00ffe0;--hacker:#00ff41;
+  --quebrada:#ff00ff;--deus:#ffffff;
+  --win:#69f0ae;--lose:#ff5252;--dna:#00e5ff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;min-height:100vh;overflow-x:hidden;
+  background-image:radial-gradient(ellipse at 20% 20%,rgba(50,30,100,.3) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(30,60,100,.3) 0%,transparent 60%);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%,rgba(255,255,255,.6) 0%,transparent 100%),
+    radial-gradient(1px 1px at 25% 40%,rgba(255,255,255,.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 50% 10%,rgba(255,255,255,.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 75% 30%,rgba(255,255,255,.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 90% 70%,rgba(255,255,255,.6) 0%,transparent 100%),
+    radial-gradient(1px 1px at 35% 85%,rgba(255,255,255,.4) 0%,transparent 100%);}
+.screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;position:relative;z-index:1;}
+.screen.active{display:flex;}
+
+/* ── MENU ── */
+#screen-menu{text-align:center;gap:0;}
+.menu-logo{margin-bottom:8px;animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.menu-crown{font-size:56px;filter:drop-shadow(0 0 16px var(--gold));display:block;margin-bottom:4px;}
+.menu-title{font-family:'Cinzel Decorative',serif;font-size:clamp(24px,7vw,50px);font-weight:900;
+  background:linear-gradient(135deg,#f0c040,#ffd700,#fff8dc,#f0c040);background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmer 3s linear infinite;letter-spacing:2px;line-height:1.1;}
+@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+.menu-subtitle{font-family:'Cinzel',serif;font-size:13px;color:var(--silver);letter-spacing:6px;text-transform:uppercase;margin-top:6px;margin-bottom:20px;opacity:.8;}
+.menu-divider{width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 20px;}
+.dna-bar{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid rgba(0,229,255,.2);border-radius:6px;padding:10px 20px;margin-bottom:16px;}
+.dna-icon{font-size:20px;filter:drop-shadow(0 0 8px var(--dna));}
+.dna-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--text2);}
+.dna-amount{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--dna);font-weight:700;}
+.btn{font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;padding:14px 40px;border-radius:4px;transition:all .2s;position:relative;overflow:hidden;min-width:200px;}
+.btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .4s;}
+.btn:hover::after{left:100%;}
+.btn-primary{background:linear-gradient(135deg,#c8971f,var(--gold2),#c8971f);color:#1a1000;box-shadow:0 4px 20px rgba(255,215,0,.4);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,215,0,.5);}
+.btn-secondary{background:transparent;color:var(--silver);border:1px solid var(--border);}
+.btn-secondary:hover{border-color:var(--silver);color:var(--text);transform:translateY(-2px);}
+.btn-danger{background:transparent;color:#ff6060;border:1px solid rgba(255,64,64,.25);font-size:12px;}
+.btn-danger:hover{border-color:#ff6060;background:rgba(255,16,16,.06);}
+.btn-shop{background:linear-gradient(135deg,#003830,#006655,#003830);color:var(--exclusiva);border:1px solid rgba(0,255,224,.3);box-shadow:0 4px 20px rgba(0,255,224,.15);}
+.btn-shop:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,255,224,.3);}
+.btn-3v3{background:linear-gradient(135deg,#1a0060,#4a00c0,#1a0060);color:#b388ff;border:1px solid rgba(180,136,255,.3);box-shadow:0 4px 20px rgba(124,77,255,.2);}
+.btn-3v3:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,77,255,.4);}
+.menu-btns{display:flex;flex-direction:column;gap:12px;align-items:center;}
+
+/* ── PORTAL ── */
+#screen-portal{gap:12px;padding:12px 20px;}
+.portal-title{font-family:'Cinzel Decorative',serif;font-size:clamp(14px,4vw,22px);color:var(--gold);text-align:center;letter-spacing:2px;}
+.mini-dna{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid rgba(0,229,255,.2);border-radius:5px;padding:6px 14px;}
+.portal-orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#4a3080,#1a1040,#0a0820);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:48px;box-shadow:0 0 40px rgba(100,60,200,.4),inset 0 0 30px rgba(100,60,200,.2);transition:all .3s;animation:orb-pulse 3s ease-in-out infinite;}
+@keyframes orb-pulse{0%,100%{box-shadow:0 0 40px rgba(100,60,200,.4),inset 0 0 30px rgba(100,60,200,.2)}50%{box-shadow:0 0 70px rgba(100,60,200,.7),inset 0 0 50px rgba(100,60,200,.4)}}
+.element-revealed{background:radial-gradient(circle at 40% 35%,var(--el-glow,#4a3080),#1a1040,#0a0820)!important;box-shadow:0 0 60px var(--el-glow,rgba(100,60,200,.6)),inset 0 0 40px rgba(100,60,200,.3)!important;}
+.rarity-badge{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:5px 18px;border-radius:2px;border:1px solid currentColor;display:none;}
+.el-name{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--text);display:none;text-align:center;}
+.el-cost{font-size:10px;color:var(--dna);display:none;font-family:'Cinzel',serif;letter-spacing:1px;}
+.portal-btns{display:flex;flex-direction:column;gap:8px;align-items:center;}
+
+/* raridades table */
+.rarities-container{width:100%;max-width:400px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;}
+.rarities-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:var(--text2);text-align:center;margin-bottom:8px;text-transform:uppercase;}
+.rarity-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.rarity-row:last-child{border-bottom:none;margin-bottom:0;}
+.rarity-label{font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:2px;min-width:76px;padding-top:2px;}
+.rarity-pct{font-size:10px;color:var(--text2);min-width:28px;}
+.rarity-els{font-size:10px;color:var(--text2);line-height:1.6;}
+.c-rara{color:var(--rara);}.c-epica{color:var(--epica);}.c-lendaria{color:var(--lendaria);}
+.c-mitica{color:var(--mitica);}.c-divina{color:var(--divina);}.c-exclusiva{color:var(--exclusiva);}
+.c-quebrada{color:var(--quebrada);}.c-deus{color:var(--deus);}
+
+/* slots */
+.slots-section{width:100%;max-width:420px;}
+.slots-title{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--text2);text-align:center;margin-bottom:8px;text-transform:uppercase;}
+.slots-row{display:flex;gap:7px;justify-content:center;}
+.slot{width:64px;height:78px;border-radius:8px;background:var(--bg2);border:1px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;position:relative;gap:2px;}
+.slot:hover{border-color:var(--gold);box-shadow:0 0 10px rgba(240,192,64,.2);}
+.slot.filled{border-style:solid;border-color:var(--slot-color,var(--border));}
+.slot.filled:hover{box-shadow:0 0 12px var(--slot-color,var(--border));}
+.slot-emoji{font-size:24px;}
+.slot-name{font-size:7px;color:var(--text2);font-family:'Cinzel',serif;text-align:center;line-height:1.2;}
+.slot-uses{position:absolute;top:3px;right:4px;font-size:9px;font-weight:700;color:var(--gold);font-family:'Cinzel',serif;}
+.slot-empty-icon{font-size:18px;color:var(--border);}
+
+/* modals */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:100;align-items:center;justify-content:center;}
+.modal-overlay.active{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;max-width:320px;width:92%;}
+.modal-box h3{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);margin-bottom:8px;letter-spacing:2px;}
+.modal-box p{font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.6;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+
+/* ── SHOP ── */
+#screen-shop{gap:14px;max-width:500px;width:100%;}
+.shop-title{font-family:'Cinzel Decorative',serif;font-size:clamp(16px,4vw,24px);color:var(--exclusiva);text-align:center;letter-spacing:2px;text-shadow:0 0 20px rgba(0,255,224,.4);}
+.shop-dna{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid rgba(0,229,255,.2);border-radius:5px;padding:6px 14px;}
+.shop-badge{display:inline-block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;padding:3px 10px;border-radius:2px;border:1px solid var(--exclusiva);color:var(--exclusiva);margin-bottom:6px;text-shadow:0 0 8px rgba(0,255,224,.6);}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
+.shop-card{background:var(--bg2);border:1px solid rgba(0,255,224,.2);border-radius:10px;padding:14px;text-align:center;transition:all .2s;cursor:pointer;}
+.shop-card:hover{border-color:var(--exclusiva);box-shadow:0 0 16px rgba(0,255,224,.25);transform:translateY(-2px);}
+.shop-card-emoji{font-size:36px;display:block;margin-bottom:6px;}
+.shop-card-name{font-family:'Cinzel',serif;font-size:12px;color:var(--exclusiva);font-weight:700;margin-bottom:4px;}
+.shop-card-desc{font-size:10px;color:var(--text2);line-height:1.5;margin-bottom:8px;}
+.shop-card-price{font-family:'Cinzel',serif;font-size:11px;color:var(--dna);font-weight:700;}
+.shop-card-owned{font-family:'Cinzel',serif;font-size:10px;color:var(--win);margin-top:4px;}
+.shop-note{font-size:11px;color:var(--text2);text-align:center;font-style:italic;}
+
+/* ── 3V3 PORTAL ── */
+#screen-3v3portal{gap:14px;max-width:500px;width:100%;}
+.v3-title{font-family:'Cinzel Decorative',serif;font-size:clamp(14px,3.5vw,22px);color:#b388ff;text-align:center;letter-spacing:2px;}
+.v3-team{display:flex;gap:8px;justify-content:center;width:100%;}
+.v3-slot{width:80px;height:90px;border-radius:8px;background:var(--bg2);border:1px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all .3s;position:relative;}
+.v3-slot.filled{border-style:solid;}
+.v3-slot-emoji{font-size:30px;}
+.v3-slot-name{font-size:8px;font-family:'Cinzel',serif;color:var(--text2);text-align:center;}
+.v3-slot-badge{font-size:8px;font-family:'Cinzel',serif;position:absolute;top:3px;right:4px;}
+.v3-orb{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#4a3080,#1a1040,#0a0820);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 0 30px rgba(100,60,200,.4);animation:orb-pulse 3s ease-in-out infinite;}
+.v3-hint{font-size:11px;color:var(--text2);text-align:center;font-style:italic;}
+
+/* ── 3V3 BATTLE ── */
+#screen-3v3battle{gap:10px;max-width:520px;width:100%;}
+.v3-battle-title{font-family:'Cinzel Decorative',serif;font-size:clamp(12px,2.5vw,17px);color:#b388ff;text-align:center;letter-spacing:2px;}
+.v3-arena{display:flex;align-items:center;gap:8px;width:100%;}
+.v3-combatant{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center;transition:all .3s;}
+.v3-combatant.active-turn{border-color:var(--gold);box-shadow:0 0 10px rgba(240,192,64,.3);}
+.v3-combatant.taking-hit{animation:shake .3s;border-color:var(--lose)!important;}
+.v3-combatant.dead{opacity:.35;border-color:#333!important;}
+.v3-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:var(--text2);margin-bottom:4px;text-transform:uppercase;}
+.v3-team-strip{display:flex;gap:3px;justify-content:center;margin-bottom:6px;}
+.v3-pip{width:20px;height:22px;border-radius:3px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s;}
+.v3-pip.current{border-color:var(--gold);box-shadow:0 0 6px rgba(240,192,64,.4);}
+.v3-pip.dead{opacity:.25;filter:grayscale(1);}
+.v3-big-emoji{font-size:38px;display:block;margin-bottom:3px;}
+.v3-el-name{font-family:'Cinzel',serif;font-size:10px;color:var(--text);}
+.v3-adv{font-size:8px;padding:1px 6px;border-radius:2px;display:none;margin:3px 0;font-weight:700;letter-spacing:1px;}
+.v3-adv.advantage{background:rgba(105,240,174,.12);color:#69f0ae;border:1px solid rgba(105,240,174,.3);display:inline-block;}
+.v3-adv.disadvantage{background:rgba(255,82,82,.12);color:#ff5252;border:1px solid rgba(255,82,82,.3);display:inline-block;}
+.v3-hp-wrap{background:#0a0a18;border-radius:2px;height:5px;overflow:hidden;margin-bottom:3px;}
+.v3-hp-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,#69f0ae,#00e676);transition:width .4s,background .4s;}
+.v3-hp-bar.low{background:linear-gradient(90deg,#ff5252,#ff1744);}
+.v3-hp-bar.mid{background:linear-gradient(90deg,#ffb74d,#ffa726);}
+.v3-hp-text{font-size:9px;color:var(--text2);}
+.v3-score{display:flex;justify-content:center;align-items:center;gap:20px;font-family:'Cinzel Decorative',serif;}
+.v3-score-num{font-size:24px;}
+.v3-score-num.player{color:var(--win);}
+.v3-score-num.enemy{color:var(--lose);}
+.v3-score-sep{font-size:14px;color:var(--text2);}
+.v3-log{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:11px;color:var(--text2);min-height:36px;text-align:center;font-style:italic;line-height:1.5;}
+.v3-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+
+/* ── BATTLE (1v1) ── */
+#screen-battle{gap:14px;max-width:500px;width:100%;margin:0 auto;}
+.battle-title{font-family:'Cinzel Decorative',serif;font-size:clamp(13px,3vw,19px);color:var(--gold);letter-spacing:2px;text-align:center;}
+.battle-arena{display:flex;align-items:center;gap:10px;width:100%;}
+.combatant{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 10px;text-align:center;transition:border-color .3s;}
+.combatant.active-turn{border-color:var(--gold);box-shadow:0 0 12px rgba(240,192,64,.3);}
+.combatant.taking-hit{animation:shake .3s;border-color:var(--lose)!important;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.combatant-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--text2);margin-bottom:8px;text-transform:uppercase;}
+.combatant-emoji{font-size:42px;display:block;margin-bottom:6px;}
+.combatant-name{font-family:'Cinzel',serif;font-size:11px;color:var(--text);margin-bottom:8px;min-height:16px;}
+.adv-badge{font-size:9px;padding:2px 7px;border-radius:2px;display:none;margin-bottom:6px;font-family:'Lato',sans-serif;font-weight:700;letter-spacing:1px;}
+.adv-badge.advantage{background:rgba(105,240,174,.12);color:#69f0ae;border:1px solid rgba(105,240,174,.3);display:inline-block;}
+.adv-badge.disadvantage{background:rgba(255,82,82,.12);color:#ff5252;border:1px solid rgba(255,82,82,.3);display:inline-block;}
+.hp-bar-wrap{background:#0a0a18;border-radius:2px;height:6px;overflow:hidden;margin-bottom:4px;}
+.hp-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,#69f0ae,#00e676);transition:width .5s,background .5s;}
+.hp-bar.low{background:linear-gradient(90deg,#ff5252,#ff1744);}
+.hp-bar.mid{background:linear-gradient(90deg,#ffb74d,#ffa726);}
+.hp-text{font-size:10px;color:var(--text2);}
+.vs-badge{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--gold);flex-shrink:0;}
+.battle-log{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--text2);min-height:40px;text-align:center;font-style:italic;line-height:1.5;}
+.battle-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.btn-battle{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;padding:12px 20px;border-radius:4px;transition:all .2s;font-weight:700;flex:1;min-width:100px;}
+.btn-attack{background:linear-gradient(135deg,#c8971f,var(--gold2),#c8971f);color:#1a1000;box-shadow:0 4px 16px rgba(255,215,0,.3);}
+.btn-attack:hover{transform:translateY(-2px);}
+.btn-attack:disabled,.btn-special:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn-special{background:var(--bg3);color:var(--epica);border:1px solid rgba(206,147,216,.25);}
+.btn-special:hover:not(:disabled){border-color:var(--epica);background:#2a1a3a;}
+.btn-flee{background:var(--bg3);color:var(--text2);border:1px solid var(--border);min-width:auto;flex:0;}
+.btn-flee:hover{border-color:var(--silver);color:var(--text);}
+.special-cd{font-size:9px;display:block;margin-top:2px;color:var(--text2);font-family:'Lato',sans-serif;font-weight:400;letter-spacing:0;}
+
+/* ── RESULT ── */
+#screen-result{text-align:center;gap:20px;}
+.result-icon{font-size:64px;animation:float 3s ease-in-out infinite;}
+.result-title{font-family:'Cinzel Decorative',serif;font-size:clamp(24px,6vw,40px);font-weight:900;}
+.result-title.win{background:linear-gradient(135deg,#69f0ae,#00e676,#b2ff59);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.result-title.lose{background:linear-gradient(135deg,#ff5252,#ff1744,#ff6e40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.result-title.flee{background:linear-gradient(135deg,#90a4ae,#b0bec5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.result-sub{font-family:'Cinzel',serif;font-size:13px;color:var(--text2);letter-spacing:2px;}
+.result-reward{font-family:'Cinzel',serif;font-size:14px;color:var(--dna);letter-spacing:1px;margin-top:4px;}
+
+/* ── FRAQUEZAS ── */
+#screen-weaknesses{gap:14px;max-width:480px;width:100%;}
+.weak-title{font-family:'Cinzel Decorative',serif;font-size:clamp(15px,3.5vw,21px);color:var(--gold);text-align:center;letter-spacing:1px;}
+.weak-table{width:100%;border-collapse:collapse;font-size:11px;}
+.weak-table th{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--text2);text-transform:uppercase;padding:7px;border-bottom:1px solid var(--border);text-align:left;}
+.weak-table td{padding:6px 9px;border-bottom:1px solid rgba(42,42,74,.5);}
+.green{color:var(--win);font-weight:700;}.red{color:var(--lose);font-weight:700;}
+
+/* ── DMG FLOAT ── */
+.dmg-float{position:fixed;pointer-events:none;font-family:'Cinzel Decorative',serif;font-size:28px;font-weight:900;z-index:200;animation:float-up 1s ease-out forwards;}
+@keyframes float-up{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(.7)}}
+
+/* special rarity text effects */
+@keyframes glitch{0%{text-shadow:2px 0 #ff00ff,-2px 0 #00ffff}25%{text-shadow:-3px 0 #ff00ff,3px 0 #00ffff}50%{text-shadow:3px 2px #00ffff,-3px -2px #ff00ff}100%{text-shadow:2px 0 #ff00ff,-2px 0 #00ffff}}
+.glitch-text{animation:glitch .15s infinite;}
+@keyframes deus-glow{0%,100%{text-shadow:0 0 10px #fff,0 0 30px #ffd700,0 0 60px #ff00ff}50%{text-shadow:0 0 20px #fff,0 0 60px #ffd700,0 0 100px #ff00ff}}
+.deus-text{animation:deus-glow 1.5s ease-in-out infinite;color:#fff;}
+@keyframes excl-pulse{0%,100%{text-shadow:0 0 8px #00ffe0,0 0 20px #00ffe0}50%{text-shadow:0 0 18px #00ffe0,0 0 40px #00ffe0,0 0 60px #006655}}
+.exclusiva-text{animation:excl-pulse 2s ease-in-out infinite;color:var(--exclusiva);}
+
+/* heal flash */
+@keyframes heal-flash{0%{background:rgba(105,240,174,.0)}50%{background:rgba(105,240,174,.25)}100%{background:rgba(105,240,174,.0)}}
+.healing{animation:heal-flash .5s ease;}
+
+/* audio */
+.audio-btn{position:fixed;bottom:16px;right:16px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;z-index:50;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.audio-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* particle canvas */
+#particle-canvas{position:fixed;inset:0;pointer-events:none;z-index:150;}
+@keyframes invis-flicker{0%,100%{opacity:1}20%{opacity:.15}40%{opacity:.7}60%{opacity:.05}80%{opacity:.6}}
+.invis-active{animation:invis-flicker .6s ease-in-out;}
+@keyframes psico-wave{0%{filter:hue-rotate(0deg) brightness(1)}50%{filter:hue-rotate(180deg) brightness(1.4)}100%{filter:hue-rotate(360deg) brightness(1)}}
+.psico-active{animation:psico-wave .8s linear;}
+</style>
+</head>
+<body>
+
+<!-- MODAL SAIR -->
+<div class="modal-overlay" id="modal-sair">
+  <div class="modal-box">
+    <h3>Sair do Jogo?</h3><p>A tua aventura será perdida...</p>
+    <div class="modal-btns">
+      <button class="btn btn-danger" onclick="hideModal('modal-sair');goTo('screen-menu');resetPortal()">SAIR</button>
+      <button class="btn btn-secondary" onclick="hideModal('modal-sair')">CANCELAR</button>
+    </div>
+  </div>
+</div>
+<!-- MODAL COMPRAR SLOT -->
+<div class="modal-overlay" id="modal-buy">
+  <div class="modal-box">
+    <h3 id="buy-title">Guardar?</h3><p id="buy-desc"></p>
+    <div class="modal-btns">
+      <button class="btn btn-primary" id="buy-confirm">COMPRAR</button>
+      <button class="btn btn-secondary" onclick="hideModal('modal-buy')">CANCELAR</button>
+    </div>
+  </div>
+</div>
+<!-- MODAL LOJA COMPRAR -->
+<div class="modal-overlay" id="modal-shop-buy">
+  <div class="modal-box">
+    <h3 id="sbuy-title">Comprar?</h3><p id="sbuy-desc"></p>
+    <div class="modal-btns">
+      <button class="btn btn-shop" id="sbuy-confirm">COMPRAR</button>
+      <button class="btn btn-secondary" onclick="hideModal('modal-shop-buy')">CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<button class="audio-btn" id="audio-btn">🔇</button>
+<canvas id="particle-canvas"></canvas>
+
+<!-- ══ MENU ══ -->
+<div class="screen active" id="screen-menu">
+  <div class="menu-logo">
+    <span class="menu-crown">👑</span>
+    <div class="menu-title">Royal Elementese</div>
+    <div class="menu-subtitle">O Destino dos Elementos</div>
+  </div>
+  <div class="menu-divider"></div>
+  <div class="dna-bar">
+    <span class="dna-icon">🧬</span><span class="dna-label">DNA</span>
+    <span class="dna-amount" id="menu-dna">0</span>
+  </div>
+  <div class="menu-btns">
+    <button class="btn btn-primary" onclick="goTo('screen-portal');renderSlots();updateDnaDisplays()">⚔ COMEÇAR 1v1</button>
+    <button class="btn btn-3v3" onclick="start3v3Portal()">⚔ MODO 3vs3</button>
+    <button class="btn btn-shop" onclick="goTo('screen-shop');renderShop()">🛒 LOJA EXCLUSIVA</button>
+    <button class="btn btn-secondary" onclick="goTo('screen-weaknesses')">📖 FRAQUEZAS</button>
+    <button class="btn btn-danger" onclick="showModal('modal-sair')">✕ SAIR</button>
+  </div>
+</div>
+
+<!-- ══ PORTAL ══ -->
+<div class="screen" id="screen-portal">
+  <div class="portal-title">✦ PORTAL DOS ELEMENTOS ✦</div>
+  <div class="mini-dna">
+    <span style="font-size:15px;filter:drop-shadow(0 0 6px var(--dna))">🧬</span>
+    <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--text2)">DNA</span>
+    <span class="dna-amount" id="portal-dna" style="font-size:15px">0</span>
+  </div>
+  <div class="portal-orb" id="orb">🌐</div>
+  <div class="rarity-badge" id="rarity-badge">—</div>
+  <div class="el-name" id="el-name">—</div>
+  <div class="el-cost" id="el-cost"></div>
+  <div class="portal-btns">
+    <button class="btn btn-primary" id="btn-roll" onclick="rollElement()">✦ ROLAR</button>
+    <button class="btn btn-secondary" id="btn-battle-start" onclick="startBattle()" style="display:none">⚔ BATALHAR</button>
+    <button class="btn btn-secondary" onclick="goTo('screen-menu')">← VOLTAR</button>
+  </div>
+  <div class="slots-section">
+    <div class="slots-title">⬦ Slots — clica vazio p/ guardar, cheio p/ usar ⬦</div>
+    <div class="slots-row" id="slots-row"></div>
+  </div>
+  <div class="rarities-container">
+    <div class="rarities-title">⬦ Tabela de Raridades ⬦</div>
+    <div class="rarity-row"><span class="rarity-label c-rara">◈ RARA</span><span class="rarity-pct">50%</span><span class="rarity-els">💧Água·🌍Terra·🔥Fogo·💨Ar·🏜Areia·👁️Invisibilidade</span></div>
+    <div class="rarity-row"><span class="rarity-label c-epica">◈ ÉPICA</span><span class="rarity-pct">30%</span><span class="rarity-els">🌿Planta·🌋Magma·🥊Luta·⚡Raio</span></div>
+    <div class="rarity-row"><span class="rarity-label c-lendaria">◈ LENDÁRIA</span><span class="rarity-pct">15%</span><span class="rarity-els">🧲Magnetismo·⚙Metal·🌑Sombra·✨Luz</span></div>
+    <div class="rarity-row"><span class="rarity-label c-mitica">◈ MÍTICA</span><span class="rarity-pct">10%</span><span class="rarity-els">🌌Espaço·🩸Sangue·👾Monstro·🌳Natureza·🔮Psico·⭐Estrela</span></div>
+    <div class="rarity-row"><span class="rarity-label c-divina">✦ DIVINA</span><span class="rarity-pct">4%</span><span class="rarity-els">☀️Sol·🌙Lua·⏳Tempo·🔮Realidade</span></div>
+    <div class="rarity-row"><span class="rarity-label c-exclusiva">✦ EXCLUSIVA</span><span class="rarity-pct">—</span><span class="rarity-els" style="color:var(--exclusiva)">💊Cura·🔢Matemática·💻Hacker (loja)</span></div>
+    <div class="rarity-row"><span class="rarity-label c-quebrada" style="font-size:9px">⚠ QUEBRADA</span><span class="rarity-pct">0.9%</span><span class="rarity-els" style="color:var(--quebrada)">💀Caos·🌀Abismo·☠Extinção</span></div>
+    <div class="rarity-row"><span class="rarity-label c-deus">★ DEUS</span><span class="rarity-pct">0.1%</span><span class="rarity-els" style="color:#fff">🌟 DEUS</span></div>
+  </div>
+</div>
+
+<!-- ══ LOJA ══ -->
+<div class="screen" id="screen-shop">
+  <div class="shop-title">🛒 LOJA EXCLUSIVA</div>
+  <div class="shop-dna">
+    <span style="font-size:15px;filter:drop-shadow(0 0 6px var(--dna))">🧬</span>
+    <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--text2)">DNA</span>
+    <span class="dna-amount" id="shop-dna" style="font-size:15px">0</span>
+  </div>
+  <div class="shop-badge">✦ RARIDADE EXCLUSIVA ✦</div>
+  <p style="font-size:11px;color:var(--text2);text-align:center">Elementos que só existem aqui — não podem ser rolados.<br>Cada compra dá <b style="color:#fff">10 usos</b> guardados nos teus slots.</p>
+  <div class="shop-grid" id="shop-grid"></div>
+  <p class="shop-note">* Exclusivos vencem Espaço! Hacker rouba HP do inimigo!</p>
+  <button class="btn btn-secondary" style="margin-top:4px" onclick="goTo('screen-menu')">← VOLTAR</button>
+</div>
+
+<!-- ══ 3V3 PORTAL ══ -->
+<div class="screen" id="screen-3v3portal">
+  <div class="v3-title">⚔ MODO 3 vs 3 ⚔</div>
+  <div class="mini-dna">
+    <span style="font-size:15px;filter:drop-shadow(0 0 6px var(--dna))">🧬</span>
+    <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--text2)">DNA</span>
+    <span class="dna-amount" id="v3-dna" style="font-size:15px">0</span>
+  </div>
+  <p style="font-size:11px;color:var(--text2);text-align:center">Rola 3 elementos para a tua equipa. Depois batalha!</p>
+  <div class="v3-team" id="v3-team-display"></div>
+  <div class="portal-orb" id="v3-orb" style="width:100px;height:100px;font-size:40px">🌐</div>
+  <div class="rarity-badge" id="v3-badge" style="display:none">—</div>
+  <div class="el-name" id="v3-elname" style="display:none;font-size:16px">—</div>
+  <div class="portal-btns">
+    <button class="btn btn-primary" id="v3-btn-roll" onclick="v3Roll()">✦ ROLAR</button>
+    <button class="btn btn-3v3" id="v3-btn-fight" onclick="start3v3Battle()" style="display:none">⚔ LUTAR!</button>
+    <button class="btn btn-secondary" onclick="goTo('screen-menu')">← VOLTAR</button>
+  </div>
+  <div class="v3-hint" id="v3-hint">Rola até ter 3 elementos na equipa</div>
+</div>
+
+<!-- ══ 3V3 BATTLE ══ -->
+<div class="screen" id="screen-3v3battle">
+  <div class="v3-battle-title">⚔ BATALHA 3vs3 ⚔</div>
+  <div class="v3-score">
+    <span class="v3-score-num player" id="v3-pscore">0</span>
+    <span class="v3-score-sep">ELIMINADOS</span>
+    <span class="v3-score-num enemy" id="v3-escore">0</span>
+  </div>
+  <div class="v3-arena">
+    <div class="v3-combatant" id="v3c-player">
+      <div class="v3-label">Jogador</div>
+      <div class="v3-team-strip" id="v3-pstrip"></div>
+      <span class="v3-big-emoji" id="v3-pemoji">⚡</span>
+      <div class="v3-el-name" id="v3-pname">—</div>
+      <div class="v3-adv" id="v3-padv"></div>
+      <div class="v3-hp-wrap"><div class="v3-hp-bar" id="v3-phpbar"></div></div>
+      <div class="v3-hp-text" id="v3-phptext">—</div>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="v3-combatant" id="v3c-enemy">
+      <div class="v3-label">Bot</div>
+      <div class="v3-team-strip" id="v3-estrip"></div>
+      <span class="v3-big-emoji" id="v3-eemoji">🔥</span>
+      <div class="v3-el-name" id="v3-ename">—</div>
+      <div class="v3-adv" id="v3-eadv"></div>
+      <div class="v3-hp-wrap"><div class="v3-hp-bar" id="v3-ehpbar"></div></div>
+      <div class="v3-hp-text" id="v3-ehptext">—</div>
+    </div>
+  </div>
+  <div class="v3-log" id="v3-log">Batalha 3v3 a iniciar...</div>
+  <div class="v3-btns">
+    <button class="btn-battle btn-attack" id="v3-btn-attack" onclick="v3Attack()">⚔ ATACAR</button>
+    <button class="btn-battle btn-special" id="v3-btn-special" onclick="v3Special()">✦ ESPECIAL<span class="special-cd" id="v3-scd">pronto</span></button>
+    <button class="btn-battle btn-flee" onclick="v3Flee()">↩ RENDER</button>
+  </div>
+</div>
+
+<!-- ══ BATTLE 1v1 ══ -->
+<div class="screen" id="screen-battle">
+  <div class="battle-title">⚔ BATALHA DOS ELEMENTOS ⚔</div>
+  <div class="battle-arena">
+    <div class="combatant" id="c-player">
+      <div class="combatant-label">Jogador</div>
+      <span class="combatant-emoji" id="p-emoji">⚡</span>
+      <div class="combatant-name" id="p-name">—</div>
+      <div class="adv-badge" id="p-adv"></div>
+      <div class="hp-bar-wrap"><div class="hp-bar" id="p-hp-bar"></div></div>
+      <div class="hp-text" id="p-hp-text">—</div>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="combatant" id="c-enemy">
+      <div class="combatant-label">Inimigo</div>
+      <span class="combatant-emoji" id="e-emoji">🔥</span>
+      <div class="combatant-name" id="e-name">—</div>
+      <div class="adv-badge" id="e-adv"></div>
+      <div class="hp-bar-wrap"><div class="hp-bar" id="e-hp-bar"></div></div>
+      <div class="hp-text" id="e-hp-text">—</div>
+    </div>
+  </div>
+  <div class="battle-log" id="battle-log">A batalha está prestes a começar...</div>
+  <div class="battle-btns">
+    <button class="btn-battle btn-attack" id="btn-attack" onclick="playerAttack()">⚔ ATACAR</button>
+    <button class="btn-battle btn-special" id="btn-special" onclick="playerSpecial()">✦ ESPECIAL<span class="special-cd" id="special-cd">pronto</span></button>
+    <button class="btn-battle btn-flee" onclick="flee()">↩</button>
+  </div>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div class="screen" id="screen-result">
+  <div class="result-icon" id="result-icon">🏆</div>
+  <div class="result-title" id="result-title">VITÓRIA!</div>
+  <div class="result-sub" id="result-sub"></div>
+  <div class="result-reward" id="result-reward"></div>
+  <button class="btn btn-primary" style="margin-top:16px" onclick="goTo('screen-menu');updateDnaDisplays()">← MENU</button>
+</div>
+
+<!-- ══ FRAQUEZAS ══ -->
+<div class="screen" id="screen-weaknesses">
+  <div class="weak-title">⚔ Sistema de Fraquezas ⚔</div>
+  <p style="font-size:11px;color:var(--text2);text-align:center;letter-spacing:1px">Cada elemento tem vantagens e fraquezas</p>
+  <div style="overflow-y:auto;max-height:65vh;width:100%">
+    <table class="weak-table">
+      <thead><tr><th>Elemento</th><th>✅ Vence</th><th>❌ Perde</th></tr></thead>
+      <tbody id="weak-tbody"></tbody>
+    </table>
+  </div>
+  <button class="btn btn-secondary" onclick="goTo('screen-menu')">← VOLTAR</button>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  CONSTANTES
+// ══════════════════════════════════════════════
+const RARITY_HP={rara:100,epica:150,lendaria:190,mitica:230,divina:250,exclusiva:260,quebrada:320,deus:999};
+const RARITY_COST={rara:10,epica:25,lendaria:60,mitica:120,divina:250,exclusiva:1000,quebrada:600,deus:9999};
+const RARITY_REWARD={rara:5,epica:12,lendaria:28,mitica:55,divina:100,exclusiva:150,quebrada:200,deus:1000};
+
+const ELEMENTS={
+  "Água":         {emoji:"💧",rarity:"rara",    glow:"#4fc3f760",baseDmg:12,specialDmg:28,specialName:"Onda Gigante"},
+  "Terra":        {emoji:"🌍",rarity:"rara",    glow:"#8d6e6360",baseDmg:13,specialDmg:30,specialName:"Terremoto"},
+  "Fogo":         {emoji:"🔥",rarity:"rara",    glow:"#ff704360",baseDmg:14,specialDmg:32,specialName:"Chamas Infernais"},
+  "Ar":           {emoji:"💨",rarity:"rara",    glow:"#b0bec560",baseDmg:11,specialDmg:26,specialName:"Tornado"},
+  "Areia":        {emoji:"🏜",rarity:"rara",    glow:"#ffd54f60",baseDmg:12,specialDmg:27,specialName:"Tempestade de Areia"},
+  "Invisibilidade":{emoji:"👁️",rarity:"rara",  glow:"#e0e0e060",baseDmg:11,specialDmg:25,specialName:"Ataque Furtivo"},
+  "Planta":       {emoji:"🌿",rarity:"epica",   glow:"#66bb6a60",baseDmg:18,specialDmg:38,specialName:"Raízes Agarradoras"},
+  "Magma":        {emoji:"🌋",rarity:"epica",   glow:"#ff572260",baseDmg:20,specialDmg:42,specialName:"Erupção Vulcânica"},
+  "Luta":         {emoji:"🥊",rarity:"epica",   glow:"#ef9a9a60",baseDmg:19,specialDmg:40,specialName:"Golpe Fatal"},
+  "Raio":         {emoji:"⚡",rarity:"epica",   glow:"#fff17660",baseDmg:21,specialDmg:44,specialName:"Tempestade Elétrica"},
+  "Magnetismo":   {emoji:"🧲",rarity:"lendaria",glow:"#90caf960",baseDmg:24,specialDmg:50,specialName:"Campo Magnético"},
+  "Metal":        {emoji:"⚙", rarity:"lendaria",glow:"#cfd8dc60",baseDmg:25,specialDmg:52,specialName:"Armadura de Aço"},
+  "Sombra":       {emoji:"🌑",rarity:"lendaria",glow:"#7e57c260",baseDmg:26,specialDmg:54,specialName:"Eclipse Sombrio"},
+  "Luz":          {emoji:"✨",rarity:"lendaria",glow:"#fff9c460",baseDmg:25,specialDmg:52,specialName:"Explosão Solar"},
+  "Espaço":       {emoji:"🌌",rarity:"mitica",  glow:"#7c4dff60",baseDmg:30,specialDmg:62,specialName:"Vórtice Cósmico"},
+  "Sangue":       {emoji:"🩸",rarity:"mitica",  glow:"#e5393560",baseDmg:29,specialDmg:60,specialName:"Drenagem Vital"},
+  "Monstro":      {emoji:"👾",rarity:"mitica",  glow:"#26c6da60",baseDmg:31,specialDmg:64,specialName:"Rugido Bestial"},
+  "Natureza":     {emoji:"🌳",rarity:"mitica",  glow:"#00c85360",baseDmg:28,specialDmg:58,specialName:"Fúria da Floresta"},
+  "Psico":        {emoji:"🔮",rarity:"mitica",  glow:"#e040fb60",baseDmg:32,specialDmg:66,specialName:"Onda Mental"},
+  "Estrela":      {emoji:"⭐",rarity:"mitica",  glow:"#ffd74060",baseDmg:33,specialDmg:68,specialName:"Supernova"},
+  "Sol":          {emoji:"☀️",rarity:"divina",  glow:"#ffab0060",baseDmg:38,specialDmg:78,specialName:"Flare Solar"},
+  "Lua":          {emoji:"🌙",rarity:"divina",  glow:"#80cbc460",baseDmg:36,specialDmg:74,specialName:"Maré Lunar"},
+  "Tempo":        {emoji:"⏳",rarity:"divina",  glow:"#80cbc460",baseDmg:34,specialDmg:72,specialName:"Paradoxo Temporal"},
+  "Realidade":    {emoji:"🔭",rarity:"divina",  glow:"#ff80ab60",baseDmg:38,specialDmg:78,specialName:"Fractura da Realidade"},
+  "Cura":         {emoji:"💊",rarity:"exclusiva",glow:"#00ffe060",baseDmg:20,specialDmg:0, specialName:"Regeneração Total",heals:true},
+  "Matemática":   {emoji:"🔢",rarity:"exclusiva",glow:"#00ffe060",baseDmg:22,specialDmg:55,specialName:"Equação Fatal"},
+  "Hacker":       {emoji:"💻",rarity:"exclusiva",glow:"#00ff4160",baseDmg:35,specialDmg:80,specialName:"Vírus Devastador",hacks:true},
+  "Caos":         {emoji:"💀",rarity:"quebrada",glow:"#ff00ff60",baseDmg:50,specialDmg:100,specialName:"Ruptura Total"},
+  "Abismo":       {emoji:"🌀",rarity:"quebrada",glow:"#aa00ff60",baseDmg:48,specialDmg:96, specialName:"Vazio Eterno"},
+  "Extinção":     {emoji:"☠", rarity:"quebrada",glow:"#ff1a1a60",baseDmg:52,specialDmg:104,specialName:"Fim de Tudo"},
+  "DEUS":         {emoji:"🌟",rarity:"deus",    glow:"#ffffff60",baseDmg:99,specialDmg:199,specialName:"JULGAMENTO DIVINO"},
+};
+
+// Elementos EXCLUSIVOS (só loja, não rolam)
+const SHOP_ELEMENTS=["Cura","Matemática","Hacker"];
+
+const RARITY_WEIGHTS=[
+  {rarity:"rara",weight:50},{rarity:"epica",weight:30},
+  {rarity:"lendaria",weight:15},{rarity:"mitica",weight:10},
+  {rarity:"divina",weight:4},{rarity:"quebrada",weight:0.9},
+  {rarity:"deus",weight:0.1},
+  // exclusiva NÃO entra no roll
+];
+
+const RARITY_COLORS={
+  rara:"var(--rara)",epica:"var(--epica)",lendaria:"var(--lendaria)",
+  mitica:"var(--mitica)",divina:"var(--divina)",exclusiva:"var(--exclusiva)",
+  quebrada:"var(--quebrada)",deus:"var(--deus)"
+};
+const RARITY_LABELS={
+  rara:"◈ RARA",epica:"◈ ÉPICA",lendaria:"◈ LENDÁRIA",
+  mitica:"◈ MÍTICA",divina:"✦ DIVINA",exclusiva:"✦ EXCLUSIVA",
+  quebrada:"⚠ QUEBRADA",deus:"★ DEUS"
+};
+
+const WEAKNESS={
+  "Água":         {vence:["Fogo","Terra","Areia","Magma","Sangue"],        perde:["Planta","Raio"]},
+  "Terra":        {vence:["Raio","Metal","Areia"],                          perde:["Água","Planta","Magma"]},
+  "Fogo":         {vence:["Planta","Ar","Metal","Areia","Natureza"],        perde:["Água","Magma","Terra"]},
+  "Ar":           {vence:["Planta","Areia","Fogo"],                         perde:["Raio","Terra","Metal"]},
+  "Areia":        {vence:["Ar","Fogo"],                                     perde:["Água","Terra","Planta"]},
+  "Invisibilidade":{vence:["Luta","Magnetismo","Terra"],                    perde:["Raio","Luz","Psico"]},
+  "Planta":       {vence:["Água","Terra","Areia","Natureza"],               perde:["Fogo","Ar","Magma","Sombra"]},
+  "Magma":        {vence:["Terra","Planta","Metal","Areia"],                perde:["Água","Raio","Espaço"]},
+  "Luta":         {vence:["Metal","Terra","Sombra"],                        perde:["Luz","Raio","Espaço"]},
+  "Raio":         {vence:["Água","Ar","Metal","Luta","Monstro"],           perde:["Terra","Natureza","Tempo"]},
+  "Magnetismo":   {vence:["Metal","Raio","Ar"],                             perde:["Fogo","Espaço","Realidade"]},
+  "Metal":        {vence:["Ar","Terra","Planta","Areia"],                   perde:["Raio","Magma","Luta","Sangue"]},
+  "Sombra":       {vence:["Luz","Planta","Espaço"],                         perde:["Luta","Realidade","Estrela","Sol"]},
+  "Luz":          {vence:["Sombra","Monstro","Luta","Natureza"],            perde:["Espaço","Tempo"]},
+  "Espaço":       {vence:["Magma","Luta","Magnetismo","Sombra"],            perde:["Tempo","Realidade","Estrela","Cura","Matemática"]},
+  "Sangue":       {vence:["Metal","Sombra","Monstro"],                      perde:["Água","Luz","Natureza","Cura"]},
+  "Monstro":      {vence:["Planta","Terra","Ar","Sombra"],                  perde:["Raio","Luz","Estrela"]},
+  "Natureza":     {vence:["Água","Terra","Raio","Sangue","Espaço"],        perde:["Fogo","Ar","Luz"]},
+  "Psico":        {vence:["Luta","Monstro","Sombra","Sangue","Ar"],        perde:["Natureza","Luz","Metal"]},
+  "Estrela":      {vence:["Sombra","Espaço","Monstro","Realidade"],        perde:["Sol","Lua","Tempo"]},
+  "Sol":          {vence:["Sombra","Natureza","Planta","Fogo","Estrela","Lua"],perde:["Água","Raio","Tempo"]},
+  "Lua":          {vence:["Espaço","Sombra","Psico","Monstro"],             perde:["Sol","Luz","Realidade"]},
+  "Tempo":        {vence:["Raio","Espaço","Estrela","Natureza","Sol"],     perde:["Realidade"]},
+  "Realidade":    {vence:["Tempo","Sombra","Magnetismo","Espaço","Lua"],   perde:["Estrela","Sol"]},
+  "Cura":         {vence:["Espaço","Sangue","Abismo","Extinção"],           perde:["Caos","DEUS"]},
+  "Matemática":   {vence:["Espaço","Metal","Raio","Luz","Sombra"],         perde:["Caos","Extinção","DEUS"]},
+  "Hacker":       {vence:["Raio","Metal","Magnetismo","Espaço","Realidade","Matemática","Caos","Abismo"],perde:["DEUS","Extinção"]},
+  "Caos":         {vence:["Água","Terra","Fogo","Ar","Areia","Planta","Magma","Luta","Raio"],perde:["Espaço","Tempo","Realidade","DEUS"]},
+  "Abismo":       {vence:["Magnetismo","Metal","Sombra","Luz","Natureza"], perde:["Estrela","Caos","DEUS","Cura"]},
+  "Extinção":     {vence:["Espaço","Sangue","Monstro","Estrela","Tempo","Realidade"],perde:["DEUS","Caos","Cura"]},
+  "DEUS":         {vence:["Caos","Abismo","Extinção","Estrela","Tempo","Realidade","Espaço","Sangue","Monstro","Natureza"],perde:[]},
+};
+
+// ══ STATE ══
+let dna=0;
+let slots=[null,null,null,null,null];
+let playerElement=null,enemyElement=null;
+let playerHP=100,playerMaxHP=100,enemyHP=100,enemyMaxHP=100;
+let specialCooldown=0,battleLocked=false,usingSlotIndex=-1;
+
+// 3v3 state
+let v3PlayerTeam=[],v3EnemyTeam=[];
+let v3PI=0,v3EI=0;
+let v3PHP=0,v3PHPmax=0,v3EHP=0,v3EHPmax=0;
+let v3Locked=false,v3SCD=0;
+let v3Elimp=0,v3Elime=0;
+
+// ══ NAV ══
+function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showModal(id){document.getElementById(id).classList.add('active');}
+function hideModal(id){document.getElementById(id).classList.remove('active');}
+
+// ══ DNA ══
+function updateDnaDisplays(){
+  ['menu-dna','portal-dna','shop-dna','v3-dna'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=dna;});
+}
+function earnDna(a){dna+=a;updateDnaDisplays();}
+function spendDna(a){if(dna<a)return false;dna-=a;updateDnaDisplays();return true;}
+
+// ══ SLOTS ══
+function renderSlots(){
+  const row=document.getElementById('slots-row');row.innerHTML='';
+  for(let i=0;i<5;i++){
+    const s=slots[i];const div=document.createElement('div');
+    div.className='slot'+(s?' filled':'');
+    if(s){
+      const el=ELEMENTS[s.name];const col=RARITY_COLORS[el.rarity];
+      div.style.setProperty('--slot-color',col);
+      div.innerHTML=`<div class="slot-uses">${s.usesLeft}×</div><div class="slot-emoji">${el.emoji}</div><div class="slot-name">${s.name}</div>`;
+      div.onclick=()=>useSlot(i);
+    } else {
+      div.innerHTML=`<div class="slot-empty-icon">＋</div><div style="font-size:8px;color:var(--text2)">Slot vazio</div>`;
+      div.onclick=()=>tryBuySlot(i);
+    }
+    row.appendChild(div);
+  }
+}
+let pendingSlotIdx=-1;
+function tryBuySlot(i){
+  if(!playerElement){alert('Rola primeiro!');return;}
+  const el=ELEMENTS[playerElement];const cost=RARITY_COST[el.rarity];
+  pendingSlotIdx=i;
+  document.getElementById('buy-title').textContent=`Guardar ${el.emoji} ${playerElement}?`;
+  document.getElementById('buy-desc').innerHTML=`Custo: <b style="color:var(--dna)">${cost} 🧬 DNA</b><br>10 usos. Tens ${dna} DNA.`;
+  document.getElementById('buy-confirm').onclick=confirmBuySlot;
+  showModal('modal-buy');
+}
+function confirmBuySlot(){
+  const el=ELEMENTS[playerElement];const cost=RARITY_COST[el.rarity];
+  if(!spendDna(cost)){hideModal('modal-buy');alert(`Precisas de ${cost} 🧬`);return;}
+  slots[pendingSlotIdx]={name:playerElement,usesLeft:10};
+  hideModal('modal-buy');renderSlots();
+}
+function useSlot(i){
+  const s=slots[i];if(!s)return;
+  playerElement=s.name;usingSlotIndex=i;
+  const el=ELEMENTS[s.name];const orb=document.getElementById('orb');
+  orb.textContent=el.emoji;orb.classList.add('element-revealed');orb.style.setProperty('--el-glow',el.glow);
+  const badge=document.getElementById('rarity-badge');
+  badge.textContent=RARITY_LABELS[el.rarity];badge.style.color=RARITY_COLORS[el.rarity];badge.style.borderColor=RARITY_COLORS[el.rarity];badge.style.display='inline-block';
+  const en=document.getElementById('el-name');en.textContent=s.name;en.style.display='block';
+  document.getElementById('el-cost').style.display='none';
+  document.getElementById('btn-battle-start').style.display='inline-block';
+}
+function consumeSlot(){
+  if(usingSlotIndex>=0&&slots[usingSlotIndex]){
+    slots[usingSlotIndex].usesLeft--;
+    if(slots[usingSlotIndex].usesLeft<=0)slots[usingSlotIndex]=null;
+    renderSlots();
+  }
+}
+
+// ══ SHOP ══
+function renderShop(){
+  updateDnaDisplays();
+  const grid=document.getElementById('shop-grid');grid.innerHTML='';
+  SHOP_ELEMENTS.forEach(name=>{
+    const el=ELEMENTS[name];const cost=RARITY_COST[el.rarity];
+    const owned=slots.filter(s=>s&&s.name===name).reduce((a,s)=>a+s.usesLeft,0);
+    const card=document.createElement('div');card.className='shop-card';
+    const desc=name==='Cura'
+      ?'Especial: cura 60 HP em vez de atacar.<br>Vence Espaço automaticamente.'
+      :name==='Hacker'
+      ?'Especial <b>Vírus Devastador</b>: rouba 40 HP do inimigo!<br>Vence Raio, Metal, Magnet., Espaço, Realidade e mais.'
+      :'Dano matemático devastador.<br>Vence Espaço automaticamente.';
+    card.innerHTML=`
+      <span class="shop-card-emoji">${el.emoji}</span>
+      <div class="shop-card-name exclusiva-text">${name}</div>
+      <div class="shop-card-desc">${desc}</div>
+      <div class="shop-card-price">💰 ${cost} 🧬 DNA</div>
+      ${owned>0?`<div class="shop-card-owned">✅ Tens ${owned} usos</div>`:''}`;
+    card.onclick=()=>shopBuy(name);
+    grid.appendChild(card);
+  });
+}
+let shopPending='';
+function shopBuy(name){
+  const el=ELEMENTS[name];const cost=RARITY_COST[el.rarity];
+  shopPending=name;
+  document.getElementById('sbuy-title').textContent=`Comprar ${el.emoji} ${name}?`;
+  document.getElementById('sbuy-desc').innerHTML=`Custo: <b style="color:var(--dna)">${cost} 🧬 DNA</b><br>Recebes <b>10 usos</b>.<br><small style="color:var(--text2)">Tens ${dna} DNA</small>`;
+  document.getElementById('sbuy-confirm').onclick=confirmShopBuy;
+  showModal('modal-shop-buy');
+}
+function confirmShopBuy(){
+  const cost=RARITY_COST[ELEMENTS[shopPending].rarity];
+  if(!spendDna(cost)){hideModal('modal-shop-buy');alert(`Precisas de ${cost} 🧬 DNA!`);return;}
+  // find empty slot
+  const idx=slots.findIndex(s=>s===null);
+  if(idx<0){hideModal('modal-shop-buy');alert('Sem slots livres! Usa ou perde um elemento primeiro.');return;}
+  slots[idx]={name:shopPending,usesLeft:10};
+  hideModal('modal-shop-buy');renderShop();renderSlots();
+}
+
+// ══ ROLL ══
+function weightedRarity(){const tot=RARITY_WEIGHTS.reduce((a,b)=>a+b.weight,0);let r=Math.random()*tot;for(const {rarity,weight} of RARITY_WEIGHTS){r-=weight;if(r<=0)return rarity;}return 'rara';}
+function randomOfRarity(r){const p=Object.entries(ELEMENTS).filter(([,v])=>v.rarity===r&&!SHOP_ELEMENTS.includes(v===ELEMENTS[v]?v:null)&&!SHOP_ELEMENTS.includes(r==='exclusiva'?'skip':null));
+  // filter shop-only
+  const pool=Object.entries(ELEMENTS).filter(([n,v])=>v.rarity===r&&!SHOP_ELEMENTS.includes(n));
+  if(!pool.length)return Object.keys(ELEMENTS)[0];
+  return pool[Math.floor(Math.random()*pool.length)][0];
+}
+function randomEnemy(){return randomOfRarity(weightedRarity());}
+
+function rollElement(){
+  const orb=document.getElementById('orb'),badge=document.getElementById('rarity-badge'),
+        en=document.getElementById('el-name'),ec=document.getElementById('el-cost'),
+        bb=document.getElementById('btn-battle-start'),br=document.getElementById('btn-roll');
+  br.disabled=true;badge.style.display='none';en.style.display='none';ec.style.display='none';bb.style.display='none';
+  orb.className='portal-orb';orb.style.removeProperty('--el-glow');orb.textContent='🌐';usingSlotIndex=-1;
+  const all=Object.keys(ELEMENTS).filter(n=>!SHOP_ELEMENTS.includes(n));let c=0;
+  const iv=setInterval(()=>{
+    orb.textContent=ELEMENTS[all[Math.floor(Math.random()*all.length)]].emoji;c++;
+    if(c>=22){
+      clearInterval(iv);
+      const rarity=weightedRarity();const name=randomOfRarity(rarity);playerElement=name;
+      const el=ELEMENTS[name];
+      orb.textContent=el.emoji;orb.classList.add('element-revealed');orb.style.setProperty('--el-glow',el.glow);
+      badge.textContent=RARITY_LABELS[rarity];badge.style.color=RARITY_COLORS[rarity];badge.style.borderColor=RARITY_COLORS[rarity];badge.style.display='inline-block';
+      en.className='el-name';badge.className='rarity-badge';
+      if(rarity==='quebrada'){badge.classList.add('glitch-text');en.classList.add('glitch-text');}
+      else if(rarity==='deus'){badge.classList.add('deus-text');en.classList.add('deus-text');}
+      else if(rarity==='exclusiva'){badge.classList.add('exclusiva-text');en.classList.add('exclusiva-text');}
+      en.textContent=name;en.style.display='block';
+      ec.textContent=`💰 Guardar: ${RARITY_COST[rarity]} 🧬 DNA`;ec.style.display='block';
+      bb.style.display='inline-block';br.disabled=false;
+      if(['lendaria','mitica','divina','quebrada','deus'].includes(rarity)){initAudio();playJingle(rarity);}
+    }
+  },55);
+}
+function resetPortal(){
+  const orb=document.getElementById('orb');
+  orb.textContent='🌐';orb.className='portal-orb';orb.style.removeProperty('--el-glow');
+  document.getElementById('rarity-badge').style.display='none';
+  const en=document.getElementById('el-name');en.style.display='none';en.className='el-name';
+  document.getElementById('el-cost').style.display='none';
+  document.getElementById('btn-battle-start').style.display='none';
+  playerElement=null;usingSlotIndex=-1;
+}
+
+// ══ 1v1 BATTLE ══
+function getAdv(atk,def){
+  const w=WEAKNESS[atk];if(!w)return'neutral';
+  if(w.vence&&w.vence.includes(def))return'advantage';
+  if(w.perde&&w.perde.includes(def))return'disadvantage';
+  return'neutral';
+}
+function calcDmg(atk,def,isSpec){
+  const el=ELEMENTS[atk];const base=isSpec?el.specialDmg:el.baseDmg;
+  const adv=getAdv(atk,def);const mult=adv==='advantage'?1.5:adv==='disadvantage'?.6:1;
+  return Math.max(1,Math.round(base*mult*(0.85+Math.random()*.3)));
+}
+function startBattle(){
+  enemyElement=randomEnemy();
+  const pEl=ELEMENTS[playerElement],eEl=ELEMENTS[enemyElement];
+  playerHP=playerMaxHP=RARITY_HP[pEl.rarity];
+  enemyHP=enemyMaxHP=RARITY_HP[eEl.rarity];
+  specialCooldown=0;battleLocked=false;
+  document.getElementById('p-emoji').textContent=pEl.emoji;document.getElementById('p-name').textContent=playerElement;
+  document.getElementById('e-emoji').textContent=eEl.emoji;document.getElementById('e-name').textContent=enemyElement;
+  updateHPBars();updateSpecialBtn();updateAdvBadges();
+  document.getElementById('battle-log').textContent=`${pEl.emoji} ${playerElement} [${playerMaxHP}HP] vs ${eEl.emoji} ${enemyElement} [${enemyMaxHP}HP]`;
+  document.getElementById('c-player').className='combatant active-turn';
+  document.getElementById('c-enemy').className='combatant';
+  goTo('screen-battle');
+}
+function updateAdvBadges(){
+  const pa=document.getElementById('p-adv'),ea=document.getElementById('e-adv');
+  const adv=getAdv(playerElement,enemyElement);
+  pa.className='adv-badge';ea.className='adv-badge';
+  if(adv==='advantage'){pa.textContent='▲ VANTAGEM';pa.classList.add('advantage');ea.textContent='▼ FRAQUEZA';ea.classList.add('disadvantage');}
+  else if(adv==='disadvantage'){pa.textContent='▼ FRAQUEZA';pa.classList.add('disadvantage');ea.textContent='▲ VANTAGEM';ea.classList.add('advantage');}
+}
+function playerAttack(){if(battleLocked)return;applyDamage('enemy',calcDmg(playerElement,enemyElement,false),false);}
+function playerSpecial(){
+  if(battleLocked||specialCooldown>0)return;
+  const el=ELEMENTS[playerElement];
+  if(el.heals){
+    // Cura special: heal self
+    specialCooldown=3;updateSpecialBtn();
+    const healAmt=60;playerHP=Math.min(playerMaxHP,playerHP+healAmt);
+    updateHPBars();
+    document.getElementById('battle-log').textContent=`💊 Cura usa Regeneração Total! +${healAmt} HP restaurados!`;
+    hitAnim('c-player');spawnAttackParticles('Cura','player',true);
+    setTimeout(()=>{
+      const eSpec=Math.random()<.25;
+      const eDmg=calcDmg(enemyElement,playerElement,eSpec);
+      playerHP=Math.max(0,playerHP-eDmg);
+      document.getElementById('battle-log').textContent=`${ELEMENTS[enemyElement].emoji} ${enemyElement} ataca! — ${eDmg} dano`;
+      hitAnim('c-player');spawnAttackParticles(enemyElement,'player',eSpec);updateHPBars();
+      if(specialCooldown>0){specialCooldown--;updateSpecialBtn();}
+      if(playerHP<=0){setTimeout(()=>endBattle('lose'),800);return;}
+      document.getElementById('c-player').className='combatant active-turn';document.getElementById('c-enemy').className='combatant';
+      battleLocked=false;
+    },900);
+    return;
+  }
+  if(el.hacks){
+    // Hacker special: steal 40 HP from enemy
+    specialCooldown=4;updateSpecialBtn();
+    const stealAmt=40;
+    enemyHP=Math.max(0,enemyHP-stealAmt);
+    playerHP=Math.min(playerMaxHP,playerHP+stealAmt);
+    updateHPBars();
+    document.getElementById('battle-log').textContent=`💻 Hacker usa Vírus Devastador! Roubou ${stealAmt} HP do inimigo!`;
+    hitAnim('c-enemy');hitAnim('c-player');
+    spawnAttackParticles('Hacker','enemy',true);
+    if(enemyHP<=0){setTimeout(()=>endBattle('win'),800);return;}
+    setTimeout(()=>{
+      const eSpec=Math.random()<.25;
+      const eDmg=calcDmg(enemyElement,playerElement,eSpec);
+      playerHP=Math.max(0,playerHP-eDmg);
+      document.getElementById('battle-log').textContent=`${ELEMENTS[enemyElement].emoji} ${enemyElement} contra-ataca! — ${eDmg} dano`;
+      hitAnim('c-player');spawnAttackParticles(enemyElement,'player',eSpec);updateHPBars();
+      if(specialCooldown>0){specialCooldown--;updateSpecialBtn();}
+      if(playerHP<=0){setTimeout(()=>endBattle('lose'),800);return;}
+      document.getElementById('c-player').className='combatant active-turn';document.getElementById('c-enemy').className='combatant';
+      battleLocked=false;
+    },900);
+    return;
+  }
+  specialCooldown=3;updateSpecialBtn();
+  applyDamage('enemy',calcDmg(playerElement,enemyElement,true),true);
+}
+function flee(){if(battleLocked)return;endBattle('flee');}
+function applyDamage(target,dmg,isSpec){
+  battleLocked=true;
+  const pEl=ELEMENTS[playerElement],eEl=ELEMENTS[enemyElement];
+  const adv=getAdv(playerElement,enemyElement);
+  if(target==='enemy'){
+    enemyHP=Math.max(0,enemyHP-dmg);
+    const at=adv==='advantage'?' 🔥 VANTAGEM!':adv==='disadvantage'?' 💧 Fraqueza...':'';
+    document.getElementById('battle-log').textContent=`${pEl.emoji} ${playerElement}${isSpec?' usa '+pEl.specialName+'!':' ataca!'} — ${dmg} dano${at}`;
+    hitAnim('c-enemy');showFloat(dmg,'enemy',adv);spawnAttackParticles(playerElement,'enemy',isSpec);
+  }
+  updateHPBars();
+  if(enemyHP<=0){setTimeout(()=>endBattle('win'),800);return;}
+  setTimeout(()=>{
+    const eSpec=Math.random()<.25;
+    const eDmg=calcDmg(enemyElement,playerElement,eSpec);
+    playerHP=Math.max(0,playerHP-eDmg);
+    const eAdv=getAdv(enemyElement,playerElement);
+    const et=eAdv==='advantage'?' 🔥 VANTAGEM!':eAdv==='disadvantage'?' 💧 Fraqueza...':'';
+    document.getElementById('battle-log').textContent=`${eEl.emoji} ${enemyElement} contra-ataca! — ${eDmg} dano${et}`;
+    hitAnim('c-player');showFloat(eDmg,'player',eAdv);spawnAttackParticles(enemyElement,'player',eSpec);updateHPBars();
+    if(specialCooldown>0){specialCooldown--;updateSpecialBtn();}
+    if(playerHP<=0){setTimeout(()=>endBattle('lose'),800);return;}
+    document.getElementById('c-player').className='combatant active-turn';document.getElementById('c-enemy').className='combatant';
+    battleLocked=false;
+  },900);
+}
+function updateHPBars(){
+  const pp=playerHP/playerMaxHP*100,ep=enemyHP/enemyMaxHP*100;
+  const pb=document.getElementById('p-hp-bar'),eb=document.getElementById('e-hp-bar');
+  pb.style.width=pp+'%';eb.style.width=ep+'%';
+  pb.className='hp-bar'+(pp<25?' low':pp<50?' mid':'');
+  eb.className='hp-bar'+(ep<25?' low':ep<50?' mid':'');
+  document.getElementById('p-hp-text').textContent=`${playerHP} / ${playerMaxHP}`;
+  document.getElementById('e-hp-text').textContent=`${enemyHP} / ${enemyMaxHP}`;
+}
+function updateSpecialBtn(){const b=document.getElementById('btn-special'),c=document.getElementById('special-cd');b.disabled=specialCooldown>0;c.textContent=specialCooldown>0?`cooldown: ${specialCooldown}`:'pronto';}
+function hitAnim(id){const el=document.getElementById(id);el.classList.remove('taking-hit');void el.offsetWidth;el.classList.add('taking-hit');setTimeout(()=>el.classList.remove('taking-hit'),400);}
+function showFloat(dmg,t,adv){
+  const el=document.getElementById(t==='enemy'?'c-enemy':'c-player');const r=el.getBoundingClientRect();
+  const d=document.createElement('div');d.className='dmg-float';
+  d.textContent=(adv==='advantage'?'💥':'')+dmg;
+  d.style.color=adv==='advantage'?'#ffd740':adv==='disadvantage'?'#90caf9':'#ff5252';
+  d.style.left=(r.left+r.width/2-20)+'px';d.style.top=(r.top+20)+'px';
+  document.body.appendChild(d);setTimeout(()=>d.remove(),1000);
+}
+function endBattle(result){
+  battleLocked=true;
+  const icon=document.getElementById('result-icon'),title=document.getElementById('result-title'),
+        sub=document.getElementById('result-sub'),rew=document.getElementById('result-reward');
+  if(result==='win'){
+    const reward=RARITY_REWARD[ELEMENTS[enemyElement].rarity]||5;earnDna(reward);
+    icon.textContent='🏆';title.textContent='VITÓRIA!';title.className='result-title win';
+    sub.textContent=`${ELEMENTS[playerElement].emoji} ${playerElement} prevaleceu!`;
+    rew.textContent=`+${reward} 🧬 DNA ganhos!`;playVictory();consumeSlot();
+  } else if(result==='lose'){
+    icon.textContent='💀';title.textContent='DERROTA!';title.className='result-title lose';
+    sub.textContent=`${ELEMENTS[enemyElement].emoji} ${enemyElement} foi mais forte...`;rew.textContent='';consumeSlot();
+  } else {
+    icon.textContent='🏃';title.textContent='FUGISTE!';title.className='result-title flee';
+    sub.textContent='Às vezes a sabedoria é recuar.';rew.textContent='';
+  }
+  goTo('screen-result');resetPortal();
+}
+
+// ══ 3V3 ══
+function start3v3Portal(){
+  v3PlayerTeam=[];
+  renderV3Team();
+  document.getElementById('v3-btn-fight').style.display='none';
+  document.getElementById('v3-hint').textContent='Rola até ter 3 elementos na equipa';
+  const orb=document.getElementById('v3-orb');orb.textContent='🌐';orb.className='portal-orb';
+  const badge=document.getElementById('v3-badge');badge.style.display='none';
+  const en=document.getElementById('v3-elname');en.style.display='none';en.className='el-name';
+  updateDnaDisplays();
+  goTo('screen-3v3portal');
+}
+
+function renderV3Team(){
+  const row=document.getElementById('v3-team-display');row.innerHTML='';
+  for(let i=0;i<3;i++){
+    const div=document.createElement('div');div.className='v3-slot'+(v3PlayerTeam[i]?' filled':'');
+    if(v3PlayerTeam[i]){
+      const el=ELEMENTS[v3PlayerTeam[i]];
+      div.style.borderColor=RARITY_COLORS[el.rarity];
+      div.innerHTML=`<div class="v3-slot-emoji">${el.emoji}</div><div class="v3-slot-name">${v3PlayerTeam[i]}</div>`;
+    } else {
+      div.innerHTML=`<div style="font-size:24px;color:var(--border)">？</div>`;
+    }
+    row.appendChild(div);
+  }
+}
+
+function v3Roll(){
+  if(v3PlayerTeam.length>=3)return;
+  const orb=document.getElementById('v3-orb'),badge=document.getElementById('v3-badge'),en=document.getElementById('v3-elname');
+  document.getElementById('v3-btn-roll').disabled=true;
+  badge.style.display='none';en.style.display='none';
+  orb.className='portal-orb';orb.style.removeProperty('--el-glow');orb.textContent='🌐';
+  const all=Object.keys(ELEMENTS).filter(n=>!SHOP_ELEMENTS.includes(n));let c=0;
+  const iv=setInterval(()=>{
+    orb.textContent=ELEMENTS[all[Math.floor(Math.random()*all.length)]].emoji;c++;
+    if(c>=18){
+      clearInterval(iv);
+      const rarity=weightedRarity();const name=randomOfRarity(rarity);
+      const el=ELEMENTS[name];
+      orb.textContent=el.emoji;orb.classList.add('element-revealed');orb.style.setProperty('--el-glow',el.glow);
+      badge.textContent=RARITY_LABELS[rarity];badge.style.color=RARITY_COLORS[rarity];badge.style.borderColor=RARITY_COLORS[rarity];badge.style.display='inline-block';
+      en.className='el-name';en.textContent=name;en.style.display='block';
+      if(rarity==='quebrada'||rarity==='deus'){badge.classList.add('glitch-text');}
+      v3PlayerTeam.push(name);renderV3Team();
+      document.getElementById('v3-btn-roll').disabled=false;
+      if(v3PlayerTeam.length>=3){
+        document.getElementById('v3-btn-fight').style.display='inline-block';
+        document.getElementById('v3-hint').textContent='Equipa completa! Vai à batalha!';
+      } else {
+        document.getElementById('v3-hint').textContent=`${v3PlayerTeam.length}/3 — Rola mais ${3-v3PlayerTeam.length}!`;
+      }
+      if(['lendaria','mitica','divina','quebrada','deus'].includes(rarity)){initAudio();playJingle(rarity);}
+    }
+  },50);
+}
+
+function start3v3Battle(){
+  // build enemy team (random)
+  v3EnemyTeam=[randomEnemy(),randomEnemy(),randomEnemy()];
+  v3PI=0;v3EI=0;v3Elimp=0;v3Elime=0;v3Locked=false;v3SCD=0;
+  initV3Round();
+  goTo('screen-3v3battle');
+}
+
+function initV3Round(){
+  const pName=v3PlayerTeam[v3PI],eName=v3EnemyTeam[v3EI];
+  const pEl=ELEMENTS[pName],eEl=ELEMENTS[eName];
+  v3PHP=v3PHPmax=RARITY_HP[pEl.rarity];
+  v3EHP=v3EHPmax=RARITY_HP[eEl.rarity];
+  v3SCD=0;
+  updateV3Display();
+  document.getElementById('v3-log').textContent=`Ronda ${v3PI+1} vs ${v3EI+1}: ${pEl.emoji} ${pName} vs ${eEl.emoji} ${eName}`;
+  document.getElementById('v3c-player').className='v3-combatant active-turn';
+  document.getElementById('v3c-enemy').className='v3-combatant';
+}
+
+function updateV3Display(){
+  const pName=v3PlayerTeam[v3PI],eName=v3EnemyTeam[v3EI];
+  const pEl=ELEMENTS[pName],eEl=ELEMENTS[eName];
+  document.getElementById('v3-pemoji').textContent=pEl.emoji;
+  document.getElementById('v3-pname').textContent=pName;
+  document.getElementById('v3-eemoji').textContent=eEl.emoji;
+  document.getElementById('v3-ename').textContent=eName;
+  document.getElementById('v3-pscore').textContent=v3Elimp;
+  document.getElementById('v3-escore').textContent=v3Elime;
+  // team strips
+  const ps=document.getElementById('v3-pstrip'),es=document.getElementById('v3-estrip');
+  ps.innerHTML='';es.innerHTML='';
+  v3PlayerTeam.forEach((n,i)=>{
+    const dead=i<v3Elime; // enemies eliminated = player's killed
+    const cur=i===v3PI;
+    const el=ELEMENTS[n];
+    ps.innerHTML+=`<div class="v3-pip${cur?' current':''}${dead?' dead':''}">${el.emoji}</div>`;
+  });
+  v3EnemyTeam.forEach((n,i)=>{
+    const dead=i<v3Elimp;
+    const cur=i===v3EI;
+    const el=ELEMENTS[n];
+    es.innerHTML+=`<div class="v3-pip${cur?' current':''}${dead?' dead':''}">${el.emoji}</div>`;
+  });
+  // adv badges
+  const adv=getAdv(pName,eName);
+  const pa=document.getElementById('v3-padv'),ea=document.getElementById('v3-eadv');
+  pa.className='v3-adv';ea.className='v3-adv';
+  if(adv==='advantage'){pa.textContent='▲ VANTAGEM';pa.classList.add('advantage');ea.textContent='▼ FRAQUEZA';ea.classList.add('disadvantage');}
+  else if(adv==='disadvantage'){pa.textContent='▼ FRAQUEZA';pa.classList.add('disadvantage');ea.textContent='▲ VANTAGEM';ea.classList.add('advantage');}
+  // hp
+  const pp=v3PHP/v3PHPmax*100,ep=v3EHP/v3EHPmax*100;
+  const pb=document.getElementById('v3-phpbar'),eb=document.getElementById('v3-ehpbar');
+  pb.style.width=pp+'%';eb.style.width=ep+'%';
+  pb.className='v3-hp-bar'+(pp<25?' low':pp<50?' mid':'');
+  eb.className='v3-hp-bar'+(ep<25?' low':ep<50?' mid':'');
+  document.getElementById('v3-phptext').textContent=`${v3PHP}/${v3PHPmax}`;
+  document.getElementById('v3-ehptext').textContent=`${v3EHP}/${v3EHPmax}`;
+  // special btn
+  const sb=document.getElementById('v3-btn-special'),sc=document.getElementById('v3-scd');
+  sb.disabled=v3SCD>0;sc.textContent=v3SCD>0?`cooldown: ${v3SCD}`:'pronto';
+}
+
+function v3Attack(){if(v3Locked)return;v3DoAttack(false);}
+function v3Special(){
+  if(v3Locked||v3SCD>0)return;
+  const el=ELEMENTS[v3PlayerTeam[v3PI]];
+  if(el.heals){
+    v3SCD=3;
+    const h=60;v3PHP=Math.min(v3PHPmax,v3PHP+h);
+    document.getElementById('v3-log').textContent=`💊 Cura usa Regeneração! +${h} HP!`;
+    spawnAttackParticles('Cura','v3c-player',true);updateV3Display();
+    setTimeout(v3EnemyTurn,900);
+    return;
+  }
+  if(el.hacks){
+    v3SCD=4;
+    const steal=40;v3EHP=Math.max(0,v3EHP-steal);v3PHP=Math.min(v3PHPmax,v3PHP+steal);
+    document.getElementById('v3-log').textContent=`💻 Hacker usa Vírus Devastador! Roubou ${steal} HP!`;
+    spawnAttackParticles('Hacker','v3c-enemy',true);updateV3Display();
+    if(v3EHP<=0){v3Elimp++;setTimeout(()=>{v3EI++;if(v3EI>=3){end3v3('win');return;}setTimeout(()=>{initV3Round();v3Locked=false;},700);},600);return;}
+    setTimeout(v3EnemyTurn,900);
+    return;
+  }
+  v3SCD=3;v3DoAttack(true);
+}
+function v3Flee(){
+  // current player element is eliminated, skip to next
+  v3Elime++;updateV3Display();
+  if(v3Elime>=3){end3v3('lose');return;}
+  v3PI++;if(v3PI>=3){end3v3('lose');return;}
+  document.getElementById('v3-log').textContent=`↩ Recuaste! ${ELEMENTS[v3PlayerTeam[v3PI]].emoji} ${v3PlayerTeam[v3PI]} entra!`;
+  setTimeout(()=>initV3Round(),600);
+}
+
+function v3DoAttack(isSpec){
+  v3Locked=true;
+  const pName=v3PlayerTeam[v3PI],eName=v3EnemyTeam[v3EI];
+  const pEl=ELEMENTS[pName];const adv=getAdv(pName,eName);
+  const dmg=calcDmg(pName,eName,isSpec);
+  v3EHP=Math.max(0,v3EHP-dmg);
+  const at=adv==='advantage'?' 🔥 VANTAGEM!':adv==='disadvantage'?' 💧 Fraqueza...':'';
+  document.getElementById('v3-log').textContent=`${pEl.emoji}${isSpec?' usa '+pEl.specialName+'!':' ataca!'} — ${dmg} dano${at}`;
+  const target=document.getElementById('v3c-enemy');target.classList.remove('taking-hit');void target.offsetWidth;target.classList.add('taking-hit');setTimeout(()=>target.classList.remove('taking-hit'),400);
+  showFloatV3(dmg,'enemy',adv);spawnAttackParticles(pName,'v3c-enemy',isSpec);
+  updateV3Display();
+  if(v3EHP<=0){
+    v3Elimp++;setTimeout(()=>{
+      document.getElementById('v3-log').textContent=`☠ ${ELEMENTS[eName].emoji} ${eName} eliminado!`;
+      v3EI++;
+      if(v3EI>=3){end3v3('win');return;}
+      setTimeout(()=>{initV3Round();v3Locked=false;},700);
+    },600);
+    return;
+  }
+  setTimeout(v3EnemyTurn,900);
+}
+
+function v3EnemyTurn(){
+  const pName=v3PlayerTeam[v3PI],eName=v3EnemyTeam[v3EI];
+  const eEl=ELEMENTS[eName];
+  const eSpec=Math.random()<.25;
+  const eDmg=calcDmg(eName,pName,eSpec);
+  const eAdv=getAdv(eName,pName);
+  v3PHP=Math.max(0,v3PHP-eDmg);
+  const et=eAdv==='advantage'?' 🔥 VANTAGEM!':eAdv==='disadvantage'?' 💧 Fraqueza...':'';
+  document.getElementById('v3-log').textContent=`${eEl.emoji} ${eName} contra-ataca! — ${eDmg} dano${et}`;
+  const target=document.getElementById('v3c-player');target.classList.remove('taking-hit');void target.offsetWidth;target.classList.add('taking-hit');setTimeout(()=>target.classList.remove('taking-hit'),400);
+  showFloatV3(eDmg,'player',eAdv);spawnAttackParticles(eName,'v3c-player',eSpec);
+  if(v3SCD>0)v3SCD--;updateV3Display();
+  if(v3PHP<=0){
+    v3Elime++;setTimeout(()=>{
+      document.getElementById('v3-log').textContent=`☠ ${ELEMENTS[pName].emoji} ${pName} foi eliminado!`;
+      v3PI++;
+      if(v3PI>=3){end3v3('lose');return;}
+      setTimeout(()=>{initV3Round();v3Locked=false;},700);
+    },600);
+    return;
+  }
+  document.getElementById('v3c-player').className='v3-combatant active-turn';
+  document.getElementById('v3c-enemy').className='v3-combatant';
+  v3Locked=false;
+}
+
+function showFloatV3(dmg,t,adv){
+  const el=document.getElementById(t==='enemy'?'v3c-enemy':'v3c-player');const r=el.getBoundingClientRect();
+  const d=document.createElement('div');d.className='dmg-float';
+  d.textContent=(adv==='advantage'?'💥':'')+dmg;
+  d.style.color=adv==='advantage'?'#ffd740':adv==='disadvantage'?'#90caf9':'#ff5252';
+  d.style.left=(r.left+r.width/2-20)+'px';d.style.top=(r.top+20)+'px';
+  document.body.appendChild(d);setTimeout(()=>d.remove(),1000);
+}
+
+function end3v3(result){
+  v3Locked=true;
+  const icon=document.getElementById('result-icon'),title=document.getElementById('result-title'),
+        sub=document.getElementById('result-sub'),rew=document.getElementById('result-reward');
+  if(result==='win'){
+    const totalReward=v3EnemyTeam.slice(0,v3EI+1).reduce((a,n)=>a+(RARITY_REWARD[ELEMENTS[n].rarity]||5),0);
+    earnDna(totalReward);
+    icon.textContent='🏆';title.textContent='VITÓRIA 3v3!';title.className='result-title win';
+    sub.textContent=`A tua equipa dominou o campo!`;rew.textContent=`+${totalReward} 🧬 DNA ganhos!`;playVictory();
+  } else {
+    icon.textContent='💀';title.textContent='DERROTA 3v3!';title.className='result-title lose';
+    sub.textContent=`O bot eliminou toda a tua equipa...`;rew.textContent='';
+  }
+  goTo('screen-result');
+}
+
+// ══ PARTICLES ══
+const pCanvas=document.getElementById('particle-canvas');
+const pCtx=pCanvas.getContext('2d');
+let particles=[],pAnimId=null;
+function resizeCanvas(){pCanvas.width=window.innerWidth;pCanvas.height=window.innerHeight;}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+
+const PARTICLE_PALETTE={
+  "Água":["#4fc3f7","#81d4fa","#b3e5fc","#ffffff"],"Terra":["#8d6e63","#a1887f","#d7ccc8","#ffcc80"],
+  "Fogo":["#ff7043","#ff5722","#ffb74d","#fff176"],"Ar":["#e0f7fa","#b2ebf2","#ffffff","#cfd8dc"],
+  "Areia":["#ffd54f","#ffca28","#ffe082","#fff8e1"],"Invisibilidade":["#e0e0e0","#bdbdbd","#ffffff","#90a4ae"],
+  "Planta":["#66bb6a","#43a047","#a5d6a7","#c8e6c9"],"Magma":["#ff5722","#e64a19","#ff8a65","#ffccbc"],
+  "Luta":["#ef9a9a","#e57373","#ffcdd2","#ffffff"],"Raio":["#fff176","#ffee58","#fffde7","#80deea"],
+  "Magnetismo":["#90caf9","#64b5f6","#1565c0","#e3f2fd"],"Metal":["#cfd8dc","#b0bec5","#eceff1","#ffffff"],
+  "Sombra":["#7e57c2","#512da8","#ce93d8","#1a0030"],"Luz":["#fff9c4","#fffde7","#ffffff","#ffe082"],
+  "Espaço":["#7c4dff","#651fff","#b388ff","#1a0060"],"Sangue":["#e53935","#b71c1c","#ef9a9a","#880000"],
+  "Monstro":["#26c6da","#00acc1","#80deea","#1a6060"],"Natureza":["#00c853","#1b5e20","#69f0ae","#b9f6ca"],
+  "Psico":["#e040fb","#aa00ff","#f8bbd9","#ce93d8"],"Estrela":["#ffd740","#ffab00","#fffde7","#fff9c4"],
+  "Sol":["#ffab00","#ff6f00","#ffe082","#fff8e1"],"Lua":["#b0bec5","#78909c","#eceff1","#e1f5fe"],
+  "Tempo":["#80cbc4","#4db6ac","#e0f2f1","#b2dfdb"],"Realidade":["#ff80ab","#f50057","#fce4ec","#ffffff"],
+  "Cura":["#00ffe0","#69f0ae","#b2fefa","#ffffff"],"Matemática":["#00ffe0","#00bcd4","#80deea","#e0f7fa"],
+  "Hacker":["#00ff41","#003b00","#39ff14","#00ffcc","#ffffff"],
+  "Caos":["#ff00ff","#00ffff","#ff1744","#7c4dff"],"Abismo":["#aa00ff","#6200ea","#7c4dff","#000000"],
+  "Extinção":["#ff1a1a","#b71c1c","#ff6e40","#000000"],"DEUS":["#ffffff","#ffd700","#ff00ff","#00e5ff"],
+};
+const PARTICLE_SHAPE={
+  "Fogo":"fire","Raio":"bolt","Psico":"spiral","Espaço":"star","Sol":"burst",
+  "Luz":"burst","DEUS":"divine","Caos":"chaos","Abismo":"void","Extinção":"skull",
+  "Realidade":"diamond","Invisibilidade":"ghost","Sangue":"drop","Lua":"star",
+  "Cura":"circle","Matemática":"diamond","Hacker":"bolt","default":"circle"
+};
+
+class Particle{
+  constructor(x,y,color,shape,size,vx,vy,life,gravity=0,spin=0){
+    Object.assign(this,{x,y,color,shape:shape||'circle',size,vx,vy,life,maxLife:life,gravity,spin,angle:Math.random()*Math.PI*2,alpha:1});
+  }
+  update(){this.x+=this.vx;this.y+=this.vy;this.vy+=this.gravity;this.vx*=.97;this.vy*=.97;this.life--;this.angle+=this.spin;this.alpha=Math.max(0,this.life/this.maxLife);this.size*=.97;}
+  draw(ctx){
+    ctx.save();ctx.globalAlpha=this.alpha;ctx.translate(this.x,this.y);ctx.rotate(this.angle);
+    ctx.fillStyle=this.color;ctx.strokeStyle=this.color;const s=this.size;
+    switch(this.shape){
+      case'circle':ctx.beginPath();ctx.arc(0,0,s,0,Math.PI*2);ctx.fill();break;
+      case'fire':ctx.beginPath();ctx.moveTo(0,-s*1.5);ctx.quadraticCurveTo(s,-s*.5,s*.3,s*.5);ctx.quadraticCurveTo(0,s*1.2,-s*.3,s*.5);ctx.quadraticCurveTo(-s,-s*.5,0,-s*1.5);ctx.fill();break;
+      case'bolt':ctx.beginPath();ctx.moveTo(0,-s*1.5);ctx.lineTo(-s*.3,0);ctx.lineTo(0,0);ctx.lineTo(-s*.3,s*1.5);ctx.lineTo(s*.3,0);ctx.lineTo(0,0);ctx.lineTo(s*.3,-s*1.5);ctx.closePath();ctx.fill();break;
+      case'star':ctx.beginPath();for(let i=0;i<5;i++){const a=i*Math.PI*.4-Math.PI/2,a2=a+Math.PI*.2;ctx.lineTo(Math.cos(a)*s,Math.sin(a)*s);ctx.lineTo(Math.cos(a2)*s*.4,Math.sin(a2)*s*.4);}ctx.closePath();ctx.fill();break;
+      case'diamond':ctx.beginPath();ctx.moveTo(0,-s*1.4);ctx.lineTo(s*.8,0);ctx.lineTo(0,s*1.4);ctx.lineTo(-s*.8,0);ctx.closePath();ctx.fill();break;
+      case'burst':for(let i=0;i<8;i++){const a=i*Math.PI*.25;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*s*1.5,Math.sin(a)*s*1.5);ctx.lineWidth=s*.4;ctx.stroke();}break;
+      case'spiral':ctx.beginPath();for(let i=0;i<20;i++){const a=i*.4,r=a*.3*s;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);}ctx.lineWidth=s*.3;ctx.stroke();break;
+      case'ghost':ctx.beginPath();ctx.arc(0,-s*.3,s*.8,Math.PI,0);ctx.lineTo(s*.8,s*.8);ctx.quadraticCurveTo(s*.4,s*.3,0,s*.8);ctx.quadraticCurveTo(-s*.4,s*.3,-s*.8,s*.8);ctx.lineTo(-s*.8,-s*.3);ctx.closePath();ctx.fill();break;
+      case'drop':ctx.beginPath();ctx.arc(0,0,s*.7,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(0,-s*1.4);ctx.lineTo(s*.5,0);ctx.lineTo(-s*.5,0);ctx.closePath();ctx.fill();break;
+      case'void':ctx.beginPath();ctx.arc(0,0,s,0,Math.PI*2);ctx.fill();ctx.globalAlpha=this.alpha*.5;ctx.fillStyle='#000';ctx.beginPath();ctx.arc(0,0,s*.5,0,Math.PI*2);ctx.fill();break;
+      case'divine':for(let i=0;i<4;i++){const a=i*Math.PI*.5;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*s*2,Math.sin(a)*s*2);ctx.lineWidth=s*.5;ctx.stroke();}ctx.beginPath();ctx.arc(0,0,s*.6,0,Math.PI*2);ctx.fill();break;
+      case'chaos':ctx.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3+(Math.random()*.5);ctx.lineTo(Math.cos(a)*s*(0.5+Math.random()),Math.sin(a)*s*(0.5+Math.random()));}ctx.closePath();ctx.fill();break;
+      default:ctx.beginPath();ctx.arc(0,0,s,0,Math.PI*2);ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+function spawnAttackParticles(attackerEl,targetId,isSpecial){
+  const isCura=attackerEl==='Cura'&&isSpecial;
+  // resolve target DOM element — support both 1v1 and 3v3 ids
+  const targetDom=document.getElementById(targetId)||(targetId==='enemy'?document.getElementById('c-enemy'):document.getElementById('c-player'));
+  if(!targetDom)return;
+  const rect=targetDom.getBoundingClientRect();
+  const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+  const palette=PARTICLE_PALETTE[attackerEl]||["#ffffff","#ffcc00","#ff5252"];
+  const shape=PARTICLE_SHAPE[attackerEl]||PARTICLE_SHAPE.default;
+  const count=isSpecial?55:28;const baseSize=isSpecial?8:5;
+  for(let i=0;i<count;i++){
+    const angle=Math.random()*Math.PI*2;
+    const speed=(1+Math.random()*5)*(isSpecial?1.6:1);
+    const color=palette[Math.floor(Math.random()*palette.length)];
+    const size=baseSize*(0.4+Math.random()*1.2);
+    const life=isSpecial?45+Math.random()*30:25+Math.random()*20;
+    const grav=shape==='fire'?-0.08:shape==='drop'?0.15:isCura?-0.1:0.04;
+    particles.push(new Particle(cx+(Math.random()-.5)*rect.width*.6,cy+(Math.random()-.5)*rect.height*.5,color,isCura?'circle':shape,size,Math.cos(angle)*speed,Math.sin(angle)*speed-(isSpecial?2:1),life,grav,(Math.random()-.5)*.25));
+  }
+  if(isSpecial){
+    for(let i=0;i<20;i++){const a=(i/20)*Math.PI*2;const speed=4+Math.random()*3;particles.push(new Particle(cx,cy,palette[i%palette.length],'circle',3+Math.random()*3,Math.cos(a)*speed,Math.sin(a)*speed,35,0.02,0));}
+  }
+  if(attackerEl==='Raio'){for(let i=0;i<(isSpecial?8:4);i++){particles.push(new Particle(cx+(Math.random()-.5)*80,rect.top,'#fff176','bolt',6+Math.random()*4,(Math.random()-.5)*2,3+Math.random()*4,20,0.3,0.1));}}
+  if(attackerEl==='Fogo'||attackerEl==='Magma'){for(let i=0;i<(isSpecial?15:8);i++){particles.push(new Particle(cx+(Math.random()-.5)*40,cy,palette[Math.floor(Math.random()*palette.length)],'fire',4+Math.random()*4,(Math.random()-.5)*2,-(2+Math.random()*3),30+Math.random()*15,-0.12,0.05));}}
+  if(attackerEl==='Psico'){for(let i=0;i<(isSpecial?30:15);i++){const a=(i/15)*Math.PI*4,r=(i/15)*60;particles.push(new Particle(cx+Math.cos(a)*r,cy+Math.sin(a)*r,palette[i%palette.length],'spiral',3+Math.random()*3,Math.cos(a+Math.PI/2)*2,Math.sin(a+Math.PI/2)*2,40,0,0.15));}}
+  if(attackerEl==='Sol'){for(let i=0;i<(isSpecial?16:8);i++){const a=(i/(isSpecial?16:8))*Math.PI*2;particles.push(new Particle(cx,cy,'#ffab00','burst',8+Math.random()*4,Math.cos(a)*6,Math.sin(a)*6,40,0,0.05));}}
+  if(attackerEl==='Hacker'){
+    // matrix rain: green bolts falling from above
+    const cols=isSpecial?14:7;
+    for(let i=0;i<cols;i++){
+      const bx=rect.left+Math.random()*rect.width;
+      const hkColors=['#00ff41','#39ff14','#00ffcc','#ffffff'];
+      for(let j=0;j<(isSpecial?4:2);j++){
+        particles.push(new Particle(bx,rect.top-10+(j*12),hkColors[j%hkColors.length],'bolt',
+          4+Math.random()*3,(Math.random()-.5)*.5,3+Math.random()*4,25+j*5,0.2,0));
+      }
+    }
+    // glitchy circles on target
+    for(let i=0;i<(isSpecial?12:6);i++){
+      particles.push(new Particle(cx+(Math.random()-.5)*rect.width*.8,cy+(Math.random()-.5)*rect.height*.6,
+        '#00ff41','circle',2+Math.random()*3,(Math.random()-.5)*4,(Math.random()-.5)*4,20,0,0));
+    }
+  }
+  if(attackerEl==='Lua'){for(let i=0;i<(isSpecial?20:10);i++){particles.push(new Particle(cx+(Math.random()-.5)*60,cy+(Math.random()-.5)*40,'#b0bec5','star',4+Math.random()*3,(Math.random()-.5)*3,(Math.random()-.5)*3,35,0,0.08));}}
+  if(attackerEl==='DEUS'){for(let i=0;i<4;i++){const a=i*Math.PI/2;for(let j=0;j<10;j++){particles.push(new Particle(cx,cy,'#ffffff','divine',5+j,Math.cos(a)*j*.8,Math.sin(a)*j*.8,50,0,0.05));}}}
+  if(attackerEl==='Invisibilidade'){for(let i=0;i<12;i++){particles.push(new Particle(cx+(Math.random()-.5)*80,cy+(Math.random()-.5)*60,'#e0e0e0','ghost',5+Math.random()*4,(Math.random()-.5)*3,(Math.random()-.5)*3,30,0,0));}
+    targetDom.classList.add('invis-active');setTimeout(()=>targetDom.classList.remove('invis-active'),700);}
+  if(attackerEl==='Psico'){targetDom.classList.add('psico-active');setTimeout(()=>targetDom.classList.remove('psico-active'),900);}
+  if(!pAnimId)animateParticles();
+}
+function animateParticles(){
+  pCtx.clearRect(0,0,pCanvas.width,pCanvas.height);
+  particles=particles.filter(p=>p.life>0);
+  particles.forEach(p=>{p.update();p.draw(pCtx);});
+  if(particles.length>0){pAnimId=requestAnimationFrame(animateParticles);}
+  else{pAnimId=null;}
+}
+
+// ══ AUDIO ══
+const AC=window.AudioContext||window.webkitAudioContext;
+let audioCtx,masterGain,musicPlaying=false,musicNodes=[];
+function initAudio(){if(!audioCtx){audioCtx=new AC();masterGain=audioCtx.createGain();masterGain.gain.value=0.18;masterGain.connect(audioCtx.destination);}}
+function playEpicMusic(){
+  initAudio();stopMusic();musicPlaying=true;
+  const mel=[[293.66,0],[349.23,.25],[392,.5],[440,.75],[523.25,1],[440,1.25],[392,1.5],[349.23,1.75],[587.33,2],[523.25,2.25],[493.88,2.5],[440,2.75],[392,3],[349.23,3.25],[329.63,3.5],[293.66,3.75],[659.25,4],[587.33,4.25],[523.25,4.5],[587.33,4.75],[659.25,5],[587.33,5.25],[523.25,5.5],[440,5.75],[392,6],[440,6.25],[493.88,6.5],[523.25,6.75],[587.33,7],[523.25,7.25],[440,7.5],[392,7.75]];
+  const bass=[[146.83,0],[146.83,1],[174.61,2],[174.61,3],[164.81,4],[164.81,5],[130.81,6],[146.83,7]];
+  const pads=[[[293.66,369.99,440],0,2],[[349.23,440,523.25],2,2],[[329.63,415.3,493.88],4,2],[[261.63,329.63,392],6,2]];
+  const L=8;
+  function sch(off){
+    mel.forEach(([f,t])=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='triangle';o.frequency.value=f;const tt=audioCtx.currentTime+off+t;g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.45,tt+.02);g.gain.exponentialRampToValueAtTime(.001,tt+.22);o.connect(g);g.connect(masterGain);o.start(tt);o.stop(tt+.25);musicNodes.push(o);});
+    bass.forEach(([f,t])=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sawtooth';o.frequency.value=f;const tt=audioCtx.currentTime+off+t;g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.28,tt+.05);g.gain.exponentialRampToValueAtTime(.001,tt+.9);o.connect(g);g.connect(masterGain);o.start(tt);o.stop(tt+1);musicNodes.push(o);});
+    pads.forEach(([fs,t,d])=>{fs.forEach(f=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=f;const tt=audioCtx.currentTime+off+t;g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.1,tt+.3);g.gain.setValueAtTime(.1,tt+d-.3);g.gain.linearRampToValueAtTime(0,tt+d);o.connect(g);g.connect(masterGain);o.start(tt);o.stop(tt+d);musicNodes.push(o);});});
+  }
+  sch(0);let nx=L;
+  const iv=setInterval(()=>{if(!musicPlaying){clearInterval(iv);return;}sch(nx);nx+=L;},(L-.5)*1000);
+  musicNodes._interval=iv;
+}
+function stopMusic(){musicPlaying=false;if(musicNodes._interval)clearInterval(musicNodes._interval);musicNodes.forEach(n=>{try{n.stop();}catch(e){}});musicNodes=[];}
+document.getElementById('audio-btn').onclick=()=>{
+  if(musicPlaying){stopMusic();document.getElementById('audio-btn').textContent='🔇';}
+  else{playEpicMusic();document.getElementById('audio-btn').textContent='🎵';}
+};
+function playJingle(r){
+  initAudio();
+  const t={lendaria:[523.25,659.25,783.99],mitica:[523.25,659.25,783.99,1046.5],divina:[523.25,659.25,783.99,1046.5,1318.5],quebrada:[440,415,392,370,349],deus:[523.25,659.25,783.99,1046.5,1318.5,1568]};
+  (t[r]||[]).forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=r==='quebrada'?'sawtooth':'triangle';o.frequency.value=f;const tt=audioCtx.currentTime+i*.12;g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(.4,tt+.03);g.gain.exponentialRampToValueAtTime(.001,tt+.3);o.connect(g);g.connect(masterGain);o.start(tt);o.stop(tt+.35);});
+}
+function playVictory(){
+  initAudio();
+  [523.25,659.25,783.99,1046.5].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='triangle';o.frequency.value=f;const t=audioCtx.currentTime+i*.15;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.5,t+.05);g.gain.exponentialRampToValueAtTime(.001,t+.4);o.connect(g);g.connect(masterGain);o.start(t);o.stop(t+.5);});
+}
+
+// ══ FRAQUEZAS TABLE ══
+function buildWeakTable(){
+  const tb=document.getElementById('weak-tbody');tb.innerHTML='';
+  for(const [n,el] of Object.entries(ELEMENTS)){
+    const w=WEAKNESS[n]||{};const c=RARITY_COLORS[el.rarity];
+    tb.innerHTML+=`<tr><td style="font-family:'Cinzel',serif;color:${c}">${el.emoji} ${n}</td><td class="green">${(w.vence||[]).join(', ')||'—'}</td><td class="red">${(w.perde||[]).join(', ')||'—'}</td></tr>`;
+  }
+}
+
+// ══ INIT ══
+buildWeakTable();renderSlots();updateDnaDisplays();
+document.body.addEventListener('click',()=>{if(!musicPlaying){playEpicMusic();document.getElementById('audio-btn').textContent='🎵';}},{once:true});
+</script>
+</body>
+</html>
