@@ -198,7 +198,7 @@
     <div class="disks" id="disks"></div>
   </nav>
   <div class="frame-wrap">
-    <iframe id="frame" title="STACK! game" allow="fullscreen"></iframe>
+    <iframe id="frame" title="STACK! game" allow="fullscreen" tabindex="0"></iframe>
   </div>
 
 <script>
@@ -247,11 +247,19 @@
     buttons[g.id] = b;
   });
 
+  function focusGame() {
+    try { frame.contentWindow && frame.contentWindow.focus(); } catch (e) {}
+    frame.focus({ preventScroll: true });
+  }
+
+  frame.addEventListener('load', focusGame);
+
   function select(id) {
     const g = games.find(x => x.id === id) || games[0];
     Object.values(buttons).forEach(b => b.classList.remove('active'));
     buttons[g.id].classList.add('active');
-    if (frame.dataset.id !== g.id) {
+    const changed = frame.dataset.id !== g.id;
+    if (changed) {
       frame.src = g.src;
       frame.dataset.id = g.id;
     }
@@ -259,6 +267,8 @@
       history.replaceState(null, '', '#' + g.id);
     }
     buttons[g.id].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    if (!changed) focusGame();
   }
 
   const initial = location.hash.slice(1);
